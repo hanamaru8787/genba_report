@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>現場記録 🌷</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fffafd;color:#514b52;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
+header{padding:22px 16px;background:linear-gradient(135deg,#fff8fc,#f7f2ff);border-bottom:1px solid #eee5ee}
+h1{margin:0;font-size:24px}
+.sub{font-size:12px;color:#8d838e;margin-top:4px}
+main{max-width:760px;margin:auto;padding:16px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.stat,.card,.panel{background:#fff;border:1px solid #eee7ed;border-radius:16px;box-shadow:0 3px 12px #503c500d}
+.stat{padding:11px 5px;text-align:center}
+.stat b{display:block;font-size:19px}
+.stat span,.meta{font-size:11px;color:#948b95}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tabs button,.primary,.ghost{border:0;border-radius:11px;padding:10px 14px;font-weight:700;cursor:pointer}
+.tabs button{background:#f5edf5;color:#6b5d69}
+.tabs button.active,.primary{background:#d98ab0;color:white}
+.toolbar{display:flex;gap:7px;margin-bottom:10px}
+.toolbar input,.toolbar select,.form input,.form select,.form textarea{width:100%;border:1px solid #e5dfe5;border-radius:10px;padding:10px;background:white;font:inherit}
+.list{display:grid;gap:10px}
+.card{padding:13px;cursor:pointer}
+.row{display:flex;gap:12px;align-items:center}
+.thumb{width:74px;height:74px;border-radius:12px;background:#f5f0f4;object-fit:cover;flex:none;display:flex;align-items:center;justify-content:center;font-size:24px}
+.card h3{margin:0;font-size:16px}
+.panel{padding:17px;margin-bottom:14px}
+.panel h2{margin:0 0 12px;font-size:18px}
+.detailPhoto{width:100%;max-height:360px;object-fit:cover;border-radius:13px;margin:5px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:#f7eef5;padding:5px 9px;border-radius:99px;font-size:11px}
+.form{display:grid;gap:10px}
+.form label{font-size:12px;font-weight:700}
+.form textarea{min-height:110px}
+.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:5px}
+.stars{font-size:25px;letter-spacing:2px;cursor:pointer}
+.hotelbox{padding:11px;border-radius:12px;background:#faf6fa}
+.empty{text-align:center;padding:35px 10px;color:#999}
+.hidden{display:none!important}
+@media(max-width:520px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .toolbar{flex-direction:column}
+  .actions{flex-direction:column}
+  .actions button{width:100%}
+}
+</style>
+</head>
+<body>
+<header>
+  <main style="padding:0 16px">
+    <h1>現場記録 🌷</h1>
+    <div class="sub">大切な現場を、あとから振り返れるように。</div>
+  </main>
+</header>
+<main>
+  <section class="stats">
+    <div class="stat"><b id="sa">0</b><span>現場数</span></div>
+    <div class="stat"><b id="sy">0</b><span>今年の現場</span></div>
+    <div class="stat"><b id="sp">0</b><span>都道府県</span></div>
+    <div class="stat"><b id="sh">0</b><span>ホテル</span></div>
+  </section>
+
+  <div class="tabs">
+    <button id="te" class="active" onclick="tab('e')">🎫 現場</button>
+    <button id="th" onclick="tab('h')">🏨 ホテル</button>
+  </div>
+
+  <section id="events">
+    <div class="toolbar">
+      <input id="q" placeholder="🔍 公演名・会場などを検索" oninput="render()">
+      <select id="pf" onchange="render()"><option value="">都道府県：すべて</option></select>
+      <select id="yf" onchange="render()"><option value="">年：すべて</option></select>
+    </div>
+    <div id="list" class="list"></div>
+    <button class="primary" style="width:100%;margin-top:12px" onclick="eventForm()">＋ 現場を登録</button>
+  </section>
+
+  <section id="hotels" class="hidden">
+    <div id="hlist" class="list"></div>
+    <button class="primary" style="width:100%;margin-top:12px" onclick="hotelForm()">＋ ホテルを登録</button>
+  </section>
+
+  <section id="detail" class="hidden"></section>
+  <section id="ef" class="panel hidden"></section>
+  <section id="hf" class="panel hidden"></section>
+</main>
+
+<script>
+let E = JSON.parse(localStorage.getItem('FR_E') || '[]');
+let H = JSON.parse(localStorage.getItem('FR_H') || '[]');
+let rating = 0;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const date = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('ja-JP', {year:'numeric', month:'2-digit', day:'2-digit'}) : '';
+
+function showView(view) {
+  ['events', 'hotels', 'detail', 'ef', 'hf'].forEach(id => {
+    let el = $(id);
+    if (el) el.classList.toggle('hidden', id !== view);
+  });
+}
+
+function save() {
+  localStorage.setItem('FR_E', JSON.stringify(E));
+  localStorage.setItem('FR_H', JSON.stringify(H));
+  stats();
+}
+
+function stats() {
+  let y = new Date().getFullYear();
+  $('sa').textContent = E.length;
+  $('sy').textContent = E.filter(x => x.date?.startsWith(y + '-')).length;
+  $('sp').textContent = new Set(E.map(x => x.pref).filter(Boolean)).size;
+  $('sh').textContent = H.length;
+
+  let currentPf = $('pf').value;
+  let currentYf = $('yf').value;
+
+  let p = [...new Set(E.map(x => x.pref).filter(Boolean))].sort();
+  let ys = [...new Set(E.map(x => x.date?.slice(0, 4)).filter(Boolean))].sort().reverse();
+
+  $('pf').innerHTML = '<option value="">都道府県：すべて</option>' + p.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join('');
+  $('yf').innerHTML = '<option value="">年：すべて</option>' + ys.map(x => `<option value="${x}">${x}</option>`).join('');
+
+  $('pf').value = currentPf;
+  $('yf').value = currentYf;
+}
+
+function tab(x) {
+  showView(x === 'e' ? 'events' : 'hotels');
+  $('te').classList.toggle('active', x === 'e');
+  $('th').classList.toggle('active', x === 'h');
+  if (x === 'e') render(); else renderH();
+}
+
+function render() {
+  stats();
+  let s = $('q').value.toLowerCase();
+  let p = $('pf').value;
+  let y = $('yf').value;
+
+  let a = E.filter(e => 
+    (!s || [e.name, e.venue, e.pref, e.seat, e.comment].join(' ').toLowerCase().includes(s)) &&
+    (!p || e.pref === p) &&
+    (!y || e.date?.startsWith(y))
+  ).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+  $('list').innerHTML = a.length ? a.map(e => `
+    <div class="card" onclick="detail('${e.id}')">
+      <div class="row">
+        ${e.photos?.[0] ? `<img class="thumb" src="${e.photos[0]}">` : '<div class="thumb">📸</div>'}
+        <div>
+          <h3>${esc(e.name)}</h3>
+          <div class="meta">${date(e.date)}　${esc(e.pref)}｜${esc(e.venue)}</div>
+          <div class="meta">🎫 ${esc(e.seat)}</div>
+        </div>
+      </div>
+    </div>
+  `).join('') : '<div class="empty">まだ現場の記録がありません🌷</div>';
+}
+
+function detail(id) {
+  let e = E.find(x => x.id === id);
+  if (!e) return tab('e');
+  let h = H.find(x => x.id === e.hotelId);
+
+  showView('detail');
+  $('detail').innerHTML = `
+    <div class="panel">
+      <button class="ghost" onclick="tab('e')">← 一覧へ</button>
+      <h2 style="margin-top:15px">${esc(e.name)}</h2>
+      <div class="chips">
+        <span class="chip">📅 ${date(e.date)}</span>
+        <span class="chip">📍 ${esc(e.pref)}</span>
+        <span class="chip">🏟 ${esc(e.venue)}</span>
+        <span class="chip">🎫 ${esc(e.seat)}</span>
+      </div>
+      ${e.photos?.length ? e.photos.map(p => `<img class="detailPhoto" src="${p}">`).join('') : ''}
+      <h2 style="margin-top:20px">💭 感想</h2>
+      <div style="white-space:pre-wrap;line-height:1.8">${esc(e.comment || '—')}</div>
+      ${h ? `
+        <h2 style="margin-top:20px">🏨 HOTEL</h2>
+        <div class="hotelbox">
+          <b>${esc(h.name)}</b>
+          <div class="meta">⭐ ${'★'.repeat(h.rating || 0)}${'☆'.repeat(5 - (h.rating || 0))}　${esc(h.revisit || '')}</div>
+          <div>${esc(h.comment || '')}</div>
+        </div>
+      ` : ''}
+      <div class="actions">
+        <button class="ghost" onclick="eventForm('${e.id}')">編集</button>
+        <button class="ghost" onclick="delE('${e.id}')">削除</button>
+      </div>
+    </div>
+  `;
+}
+
+function eventForm(id) {
+  let e = id ? E.find(x => x.id === id) : {date:'', pref:'', venue:'', name:'', seat:'', comment:'', photos:[], hotelId:''};
+  showView('ef');
+  $('ef').innerHTML = `
+    <h2>${id ? '現場を編集' : '🎫 現場を登録'}</h2>
+    <div class="form">
+      <label>日付 *</label>
+      <input id="fd" type="date" value="${esc(e.date)}">
+      <label>都道府県 *</label>
+      <input id="fp" value="${esc(e.pref)}" placeholder="大阪府">
+      <label>会場 *</label>
+      <input id="fv" value="${esc(e.venue)}" placeholder="大阪城ホール">
+      <label>公演名 *</label>
+      <input id="fn" value="${esc(e.name)}">
+      <label>座席 *</label>
+      <input id="fs" value="${esc(e.seat)}">
+      <label>感想 *</label>
+      <textarea id="fc">${esc(e.comment)}</textarea>
+      <label>写真</label>
+      <input id="fi" type="file" accept="image/*" multiple>
+      <label>紐付けるホテル（任意）</label>
+      <select id="fh">
+        <option value="">なし</option>
+        ${H.map(h => `<option value="${h.id}" ${e.hotelId === h.id ? 'selected' : ''}>${esc(h.name)}</option>`).join('')}
+      </select>
+      <div class="actions">
+        <button class="ghost" onclick="tab('e')">キャンセル</button>
+        <button class="primary" onclick="saveE('${id || ''}')">保存</button>
+      </div>
+    </div>
+  `;
+}
+
+async function pics(files) {
+  return Promise.all([...files].map(f => new Promise(r => {
+    let x = new FileReader();
+    x.onload = () => r(x.result);
+    x.readAsDataURL(f);
+  })));
+}
+
+async function saveE(id) {
+  let fdv = $('fd'), fpv = $('fp'), fvv = $('fv'), fnv = $('fn'), fsv = $('fs'), fcv = $('fc'), fiv = $('fi'), fhv = $('fh');
+  if (!fdv.value || !fpv.value || !fvv.value || !fnv.value || !fsv.value || !fcv.value) {
+    return alert('必須項目を入力してね');
+  }
+  let old = id && E.find(x => x.id === id);
+  let ps = old?.photos || [];
+  if (fiv.files.length) {
+    ps = await pics(fiv.files);
+  }
+  let o = {
+    id: id || Date.now().toString(),
+    date: fdv.value,
+    pref: fpv.value,
+    venue: fvv.value,
+    name: fnv.value,
+    seat: fsv.value,
+    comment: fcv.value,
+    photos: ps,
+    hotelId: fhv.value
+  };
+  if (old) Object.assign(old, o); else E.push(o);
+  save();
+  detail(o.id);
+}
+
+function delE(id) {
+  if (confirm('この現場を削除する？')) {
+    E = E.filter(x => x.id !== id);
+    save();
+    tab('e');
+  }
+}
+
+function renderH() {
+  $('hlist').innerHTML = H.length ? H.map(h => `
+    <div class="card" onclick="detailH('${h.id}')">
+      <h3>🏨 ${esc(h.name)}</h3>
+      <div class="meta">${esc(h.pref)}　${esc(h.station)}</div>
+      <div class="meta">⭐ ${'★'.repeat(h.rating || 0)}${'☆'.repeat(5 - (h.rating || 0))}　${esc(h.revisit || '')}</div>
+    </div>
+  `).join('') : '<div class="empty">まだホテルの記録がありません🏨</div>';
+}
+
+function detailH(id) {
+  let h = H.find(x => x.id === id);
+  if (!h) return tab('h');
+  let u = E.filter(e => e.hotelId === id);
+
+  showView('detail');
+  $('detail').innerHTML = `
+    <div class="panel">
+      <button class="ghost" onclick="tab('h')">← ホテル一覧</button>
+      <h2 style="margin-top:15px">🏨 ${esc(h.name)}</h2>
+      <div class="chips">
+        <span class="chip">📍 ${esc(h.pref)}</span>
+        <span class="chip">🚉 ${esc(h.station)}</span>
+        <span class="chip">💰 ${esc(h.price)}円</span>
+        <span class="chip">⭐ ${'★'.repeat(h.rating || 0)}${'☆'.repeat(5 - (h.rating || 0))}</span>
+      </div>
+      <h2 style="margin-top:20px">💭 感想</h2>
+      <div style="white-space:pre-wrap">${esc(h.comment || '—')}</div>
+      <h2 style="margin-top:20px">🎫 利用した現場</h2>
+      ${u.length ? u.map(e => `<div class="hotelbox">${esc(e.name)}｜${date(e.date)}</div>`).join('') : '<div class="meta">まだ現場と紐付いていません</div>'}
+      <div class="actions">
+        <button class="ghost" onclick="hotelForm('${h.id}')">編集</button>
+        <button class="ghost" onclick="delH('${h.id}')">削除</button>
+      </div>
+    </div>
+  `;
+}
+
+function hotelForm(id) {
+  let h = id ? H.find(x => x.id === id) : {name:'', pref:'', station:'', date:'', price:'', rating:0, revisit:'◎ また泊まりたい', comment:''};
+  rating = h.rating || 0;
+  showView('hf');
+  $('hf').innerHTML = `
+    <h2>${id ? 'ホテルを編集' : '🏨 ホテルを登録'}</h2>
+    <div class="form">
+      <label>ホテル名 *</label>
+      <input id="hn" value="${esc(h.name)}">
+      <label>都道府県</label>
+      <input id="hp" value="${esc(h.pref)}">
+      <label>最寄り駅</label>
+      <input id="hs" value="${esc(h.station)}">
+      <label>宿泊日</label>
+      <input id="hd" type="date" value="${esc(h.date)}">
+      <label>料金（円）</label>
+      <input id="hprice" type="number" value="${esc(h.price)}">
+      <label>満足度</label>
+      <div class="stars" id="st">${[1,2,3,4,5].map(i => `<span onclick="setR(${i})">${i <= rating ? '★' : '☆'}</span>`).join('')}</div>
+      <label>また泊まりたい？</label>
+      <select id="hr">
+        <option ${h.revisit === '◎ また泊まりたい' ? 'selected' : ''}>◎ また泊まりたい</option>
+        <option ${h.revisit === '△ 条件次第' ? 'selected' : ''}>△ 条件次第</option>
+        <option ${h.revisit === '× もう泊まらない' ? 'selected' : ''}>× もう泊まらない</option>
+      </select>
+      <label>感想</label>
+      <textarea id="hc">${esc(h.comment)}</textarea>
+      <div class="actions">
+        <button class="ghost" onclick="tab('h')">キャンセル</button>
+        <button class="primary" onclick="saveH('${id || ''}')">保存</button>
+      </div>
+    </div>
+  `;
+}
+
+function setR(n) {
+  rating = n;
+  $('st').innerHTML = [1,2,3,4,5].map(i => `<span onclick="setR(${i})">${i <= n ? '★' : '☆'}</span>`).join('');
+}
+
+function saveH(id) {
+  let hnv = $('hn'), hpv = $('hp'), hsv = $('hs'), hdv = $('hd'), hpv2 = $('hprice'), hrv = $('hr'), hcv = $('hc');
+  if (!hnv.value) return alert('ホテル名を入力してね');
+  let old = id && H.find(x => x.id === id);
+  let o = {
+    id: id || Date.now().toString(),
+    name: hnv.value,
+    pref: hpv.value,
+    station: hsv.value,
+    date: hdv.value,
+    price: hpv2.value,
+    rating,
+    revisit: hrv.value,
+    comment: hcv.value
+  };
+  if (old) Object.assign(old, o); else H.push(o);
+  save();
+  detailH(o.id);
+}
+
+function delH(id) {
+  if (confirm('このホテルを削除する？')) {
+    H = H.filter(x => x.id !== id);
+    E.forEach(e => { if (e.hotelId === id) e.hotelId = ''; });
+    save();
+    tab('h');
+  }
+}
+
+stats();
+render();
+</script>
+</body>
+</html>
