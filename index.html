@@ -2,386 +2,103 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>現場記録 🌷</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#fffafd;color:#514b52;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
-header{padding:22px 16px;background:linear-gradient(135deg,#fff8fc,#f7f2ff);border-bottom:1px solid #eee5ee}
-h1{margin:0;font-size:24px}
-.sub{font-size:12px;color:#8d838e;margin-top:4px}
-main{max-width:760px;margin:auto;padding:16px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
-.stat,.card,.panel{background:#fff;border:1px solid #eee7ed;border-radius:16px;box-shadow:0 3px 12px #503c500d}
-.stat{padding:11px 5px;text-align:center}
-.stat b{display:block;font-size:19px}
-.stat span,.meta{font-size:11px;color:#948b95}
-.tabs{display:flex;gap:8px;margin-bottom:12px}
-.tabs button,.primary,.ghost{border:0;border-radius:11px;padding:10px 14px;font-weight:700;cursor:pointer}
-.tabs button{background:#f5edf5;color:#6b5d69}
-.tabs button.active,.primary{background:#d98ab0;color:white}
-.toolbar{display:flex;gap:7px;margin-bottom:10px}
-.toolbar input,.toolbar select,.form input,.form select,.form textarea{width:100%;border:1px solid #e5dfe5;border-radius:10px;padding:10px;background:white;font:inherit}
-.list{display:grid;gap:10px}
-.card{padding:13px;cursor:pointer}
-.row{display:flex;gap:12px;align-items:center}
-.thumb{width:74px;height:74px;border-radius:12px;background:#f5f0f4;object-fit:cover;flex:none;display:flex;align-items:center;justify-content:center;font-size:24px}
-.card h3{margin:0;font-size:16px}
-.panel{padding:17px;margin-bottom:14px}
-.panel h2{margin:0 0 12px;font-size:18px}
-.detailPhoto{width:100%;max-height:360px;object-fit:cover;border-radius:13px;margin:5px 0}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{background:#f7eef5;padding:5px 9px;border-radius:99px;font-size:11px}
-.form{display:grid;gap:10px}
-.form label{font-size:12px;font-weight:700}
-.form textarea{min-height:110px}
-.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:5px}
-.stars{font-size:25px;letter-spacing:2px;cursor:pointer}
-.hotelbox{padding:11px;border-radius:12px;background:#faf6fa}
-.empty{text-align:center;padding:35px 10px;color:#999}
-.hidden{display:none!important}
-@media(max-width:520px){
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .toolbar{flex-direction:column}
-  .actions{flex-direction:column}
-  .actions button{width:100%}
-}
+body{margin:0;background:#fffafd;color:#554e56;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
+header{padding:28px 18px 25px;background:linear-gradient(135deg,#fff7fb,#f6f0ff);border-bottom:1px solid #eee6ee}
+header .inner{max-width:760px;margin:auto}
+h1{margin:0;font-size:30px;letter-spacing:.02em} .sub{margin-top:5px;color:#a096a0;font-size:15px}
+main{max-width:760px;margin:auto;padding:20px 16px 50px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.stat{background:#fff;border:1px solid #eee5ec;border-radius:24px;padding:17px 8px;text-align:center;box-shadow:0 4px 16px #765c760d}.stat b{display:block;font-size:28px;color:#554e56}.stat span{display:block;margin-top:4px;color:#aaa0aa;font-size:14px}
+.main-tabs,.sub-tabs{display:flex;gap:8px;overflow:auto;margin-bottom:14px}.main-tabs button,.sub-tabs button{border:0;white-space:nowrap;border-radius:14px;padding:11px 15px;font-weight:800;font-size:15px}.main-tabs button{background:#f4edf5;color:#6d626c}.main-tabs .active{background:#d989b0;color:#fff}.sub-tabs{margin-bottom:15px}.sub-tabs button{background:#f7eff6;color:#7a6c77}.sub-tabs .active{background:#d989b0;color:#fff}
+.card,.panel{background:#fff;border:1px solid #eee6ed;border-radius:22px;box-shadow:0 4px 18px #765c760d}.card{padding:15px;margin-bottom:11px}.panel{padding:18px;margin-bottom:15px}
+.toolbar{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}.toolbar .search{grid-column:1/-1}.toolbar input,.toolbar select,.form input,.form select,.form textarea{width:100%;border:1px solid #e5dfe5;border-radius:13px;padding:12px;background:#fff;color:#554e56;font:inherit}.toolbar input::placeholder{color:#aaa2aa}
+.list-card{display:flex;gap:13px;align-items:center;padding:12px;border-radius:18px;background:#fff;border:1px solid #eee6ed;box-shadow:0 3px 12px #765c7608;margin-bottom:9px;cursor:pointer}.thumb{width:86px;height:86px;flex:0 0 86px;border-radius:15px;object-fit:cover;background:#f6f0f5}.list-info{min-width:0}.list-title{font-weight:800;font-size:16px;line-height:1.45}.meta{color:#978e98;font-size:12px;line-height:1.65}.empty{text-align:center;color:#aaa0aa;padding:34px 10px}
+.primary,.ghost,.dangerBtn{border:0;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px}.primary{background:#d989b0;color:#fff}.ghost{background:#f2edf2;color:#685e68}.dangerBtn{background:#fff0f3;color:#a75d70}.full{width:100%}.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:15px}.hint{font-size:12px;color:#a198a1;font-weight:400}.hidden{display:none!important}
+.detail-head{margin-top:15px}.detail-title{font-size:25px;line-height:1.4;margin:13px 0}.chips{display:flex;gap:7px;flex-wrap:wrap}.chip{background:#f8eef6;border-radius:999px;padding:7px 11px;color:#756976;font-size:12px}.section-title{font-size:17px;font-weight:800;margin:22px 0 9px}
+.carousel{position:relative;margin-top:13px}.carousel img{display:block;width:100%;max-height:560px;object-fit:contain;border-radius:17px;background:#faf6fa}.arrow{position:absolute;top:50%;transform:translateY(-50%);border:0;background:transparent!important;color:#fff;text-shadow:0 1px 5px #555;font-size:40px;line-height:1;padding:10px 4px}.arrow.left{left:0}.arrow.right{right:0}.dots{text-align:center;color:#9d929e;font-size:12px;margin-top:7px}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:9px}.photo-item{position:relative}.photo-item img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;display:block}.photo-item button{position:absolute;left:5px;bottom:5px;border:0;border-radius:8px;padding:4px 7px;background:#ffffffdd;color:#655b65;font-size:10px;font-weight:700}.photo-item.cover img{outline:3px solid #d989b0}.photo-item .remove{right:5px;left:auto;background:#ffffffdd;color:#a75d70}
+.form{display:grid;gap:9px}.form label{font-size:13px;font-weight:800}.form textarea{min-height:115px;resize:vertical}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.schedule{padding:12px;border-radius:16px;background:#faf7fa;border:1px solid #eee7ee;margin-bottom:9px}.schedule-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.schedule-actions{display:flex;justify-content:flex-end;margin-top:6px}.checkline{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700}.checkline input{width:auto}.result-select{margin-top:7px}
+.ticket-card .ticket-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.status{display:inline-block;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800}.status.win{background:#fce7f1;color:#a65d7c}.status.wait{background:#fff1dc;color:#a97835}.status.lose{background:#eee;color:#777}.status.none{background:#f2edf2;color:#776d77}
+.calendar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.calendar-head b{font-size:17px}.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.dow{text-align:center;color:#9b919c;font-size:11px;padding:5px}.day{min-height:54px;border-radius:10px;padding:5px;text-align:center;font-size:12px;background:#fff}.day.has{background:#faedf5;font-weight:800}.day.future{background:#f3eefb}.day small{display:block;margin-top:3px;font-size:8px;color:#a96b8b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hotel-card{display:flex;justify-content:space-between;gap:10px;align-items:center}.hotel-name{font-weight:800;font-size:16px}.stars{letter-spacing:1px;color:#c37b9e}
+.toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,15px);background:#5d555d;color:#fff;padding:11px 18px;border-radius:999px;font-size:13px;font-weight:800;opacity:0;pointer-events:none;transition:.2s;z-index:99;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:520px){h1{font-size:27px}.toolbar{grid-template-columns:1fr}.toolbar .search{grid-column:auto}.form-row,.schedule-grid{grid-template-columns:1fr}.actions{flex-direction:column}.actions button{width:100%}.list-card{padding:10px}.thumb{width:78px;height:78px;flex-basis:78px}}
+
+.logo-title{margin:0;font-size:34px;line-height:1.05;letter-spacing:.05em;font-weight:800}
+.logo-sub{margin-top:7px;color:#a096a0;font-size:12px;letter-spacing:.16em;font-weight:400}
 </style>
 </head>
 <body>
-<header>
-  <main style="padding:0 16px">
-    <h1>現場記録 🌷</h1>
-    <div class="sub">大切な現場を、あとから振り返れるように。</div>
-  </main>
-</header>
+<header><div class="inner"><h1 class="logo-title">おしろぐ</h1><div class="logo-sub">oshi log</div></div></header>
 <main>
-  <section class="stats">
-    <div class="stat"><b id="sa">0</b><span>現場数</span></div>
-    <div class="stat"><b id="sy">0</b><span>今年の現場</span></div>
-    <div class="stat"><b id="sp">0</b><span>都道府県</span></div>
-    <div class="stat"><b id="sh">0</b><span>ホテル</span></div>
-  </section>
+<nav class="main-tabs"><button id="tabTicket" onclick="switchMain('ticket')">🎫ちけっと</button><button id="tabEvent" onclick="switchMain('event')">🎀おもいで</button><button id="tabHotel" onclick="switchMain('hotel')">🏨おとまり</button></nav>
 
-  <div class="tabs">
-    <button id="te" class="active" onclick="tab('e')">🎫 現場</button>
-    <button id="th" onclick="tab('h')">🏨 ホテル</button>
-  </div>
+<section id="ticketPage">
+<div id="ticketList"></div><button class="primary full" onclick="ticketForm()">＋ チケット申し込みを登録</button>
+</section>
 
-  <section id="events">
-    <div class="toolbar">
-      <input id="q" placeholder="🔍 公演名・会場などを検索" oninput="render()">
-      <select id="pf" onchange="render()"><option value="">都道府県：すべて</option></select>
-      <select id="yf" onchange="render()"><option value="">年：すべて</option></select>
-    </div>
-    <div id="list" class="list"></div>
-    <button class="primary" style="width:100%;margin-top:12px" onclick="eventForm()">＋ 現場を登録</button>
-  </section>
+<section id="eventPage" class="hidden">
+<div class="sub-tabs"><button id="subFuture" onclick="eventMode='future';renderEvents()">これから</button><button id="subPast" onclick="eventMode='past';renderEvents()">思い出</button><button id="subCal" onclick="eventMode='calendar';renderEvents()">カレンダー</button></div>
+<div id="eventContent"></div><button class="primary full" onclick="eventForm()">＋ 現場を登録</button>
+</section>
 
-  <section id="hotels" class="hidden">
-    <div id="hlist" class="list"></div>
-    <button class="primary" style="width:100%;margin-top:12px" onclick="hotelForm()">＋ ホテルを登録</button>
-  </section>
-
-  <section id="detail" class="hidden"></section>
-  <section id="ef" class="panel hidden"></section>
-  <section id="hf" class="panel hidden"></section>
-</main>
-
+<section id="hotelPage" class="hidden"><div id="hotelList"></div><button class="primary full" onclick="hotelForm()">＋ 宿泊記録を登録</button></section>
+<section id="editor" class="hidden"></section><section id="detail" class="hidden"></section>
+</main><div id="toast" class="toast">保存されました ✓</div>
 <script>
-let E = JSON.parse(localStorage.getItem('FR_E') || '[]');
-let H = JSON.parse(localStorage.getItem('FR_H') || '[]');
-let rating = 0;
+const KEY='field_album_v4';
+let db=loadDB();let eventMode='future';let currentPhotos=[];let cover=0;let currentEventId='';let currentSlide=0;let calendarDate=new Date();
+function loadDB(){try{let d=JSON.parse(localStorage.getItem(KEY)||'');return {tickets:Array.isArray(d.tickets)?d.tickets:[],events:Array.isArray(d.events)?d.events:[],hotels:Array.isArray(d.hotels)?d.hotels:[]}}catch{return {tickets:[],events:[],hotels:[]}}}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2);
+const isoToday=()=>new Date().toISOString().slice(0,10);
+const dateText=s=>s?new Date(s+'T00:00:00').toLocaleDateString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit'}):'';
+function persist(){localStorage.setItem(KEY,JSON.stringify(db));updateStats()}
+function toast(){let t=$('toast');t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),1800)}
+function updateStats(){}
+function hideAll(){['ticketPage','eventPage','hotelPage','editor','detail'].forEach(id=>$(id).classList.add('hidden'))}
+function switchMain(x){hideAll();['tabTicket','tabEvent','tabHotel'].forEach(id=>$(id).classList.remove('active'));$(x==='ticket'?'ticketPage':x==='event'?'eventPage':'hotelPage').classList.remove('hidden');$(x==='ticket'?'tabTicket':x==='event'?'tabEvent':'tabHotel').classList.add('active');if(x==='ticket')renderTickets();if(x==='event')renderEvents();if(x==='hotel')renderHotels()}
+function editor(title,html,back){hideAll();$('editor').classList.remove('hidden');$('editor').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('${back}')">← 戻る</button><h2>${title}</h2>${html}</div>`}
+function statusHtml(s){if(s==='win')return '<span class="status win">🎉 当選</span>';if(s==='lose')return '<span class="status lose">落選</span>';if(s==='wait')return '<span class="status wait">⏳ 当落待ち</span>';return '<span class="status none">未登録</span>'}
 
-const $ = id => document.getElementById(id);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-const date = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('ja-JP', {year:'numeric', month:'2-digit', day:'2-digit'}) : '';
-
-function showView(view) {
-  ['events', 'hotels', 'detail', 'ef', 'hf'].forEach(id => {
-    let el = $(id);
-    if (el) el.classList.toggle('hidden', id !== view);
-  });
+function renderTickets(){
+ $('ticketList').innerHTML=db.tickets.length?db.tickets.map(t=>{let selected=t.shows.filter(s=>s.selected),wins=selected.filter(s=>s.result==='win');return `<div class="card ticket-card" onclick="ticketDetail('${t.id}')"><div class="ticket-top"><div><div class="list-title">${esc(t.name||'公演名未登録')}</div><div class="meta">申込期間 ${dateText(t.period)} ～ ${dateText(t.deadline)}</div><div class="meta">当落 ${dateText(t.resultDate)}　入金 ${dateText(t.payment)}</div></div>${wins.length?statusHtml('win'):selected.some(s=>s.result==='lose')?statusHtml('lose'):selected.length?statusHtml('wait'):''}</div><div class="meta" style="margin-top:6px">申込公演：${selected.length}公演　／　全${t.shows.length}公演</div></div>`}).join(''):'<div class="card empty">まだチケット申し込みの記録がありません🎫</div>'
 }
+function ticketForm(id){let t=id?db.tickets.find(x=>x.id===id):{name:'',period:'',deadline:'',resultDate:'',payment:'',shows:[]};editor(id?'🎫 申し込みを編集':'🎫ちけっと',`<div class="form"><label>公演名</label><input id="tn" value="${esc(t.name)}"><label>申込期間</label><div class="form-row"><input id="tp" type="date" value="${esc(t.period)}"><input id="tp2" type="date" value="${esc(t.periodEnd||'')}"></div><div class="hint">開始日 ～ 終了日</div><label>申込期限</label><input id="td" type="date" value="${esc(t.deadline)}"><label>当落日</label><input id="tr" type="date" value="${esc(t.resultDate)}"><label>入金期限</label><input id="tpay" type="date" value="${esc(t.payment)}"><label>公演日・都道府県・会場・公演時間（全スケジュール）</label><div id="scheduleRows">${(t.shows||[]).map(showRow).join('')}</div><button type="button" class="ghost" onclick="addShow()">＋ 公演を追加</button><div class="actions"><button class="primary" onclick="saveTicket('${id||''}')">保存</button></div></div>`,'ticket')}
+function showRow(s={}){return `<div class="schedule"><div class="schedule-grid"><input class="sd" type="date" value="${esc(s.date)}" placeholder="公演日"><input class="sp" value="${esc(s.pref)}" placeholder="都道府県"><input class="sv" value="${esc(s.venue)}" placeholder="会場"><input class="st" value="${esc(s.time)}" placeholder="公演時間"></div><label class="checkline" style="margin-top:8px"><input class="ss" type="checkbox" ${s.selected?'checked':''}> この公演を申し込む</label><select class="sr result-select"><option value="wait" ${!s.result||s.result==='wait'?'selected':''}>当落未登録</option><option value="win" ${s.result==='win'?'selected':''}>当選</option><option value="lose" ${s.result==='lose'?'selected':''}>落選</option></select></div>`}
+function addShow(){let d=document.createElement('div');d.innerHTML=showRow();$('scheduleRows').appendChild(d.firstElementChild)}
+function saveTicket(id){let shows=[...document.querySelectorAll('.schedule')].map(r=>({date:r.querySelector('.sd').value,pref:r.querySelector('.sp').value,venue:r.querySelector('.sv').value,time:r.querySelector('.st').value,selected:r.querySelector('.ss').checked,result:r.querySelector('.sr').value}));let o={id:id||uid(),name:$('tn').value,period:$('tp').value,periodEnd:$('tp2').value,deadline:$('td').value,resultDate:$('tr').value,payment:$('tpay').value,shows};let old=id&&db.tickets.find(x=>x.id===id);old?Object.assign(old,o):db.tickets.push(o);persist();toast();setTimeout(()=>switchMain('ticket'),120)}
+function ticketDetail(id){let t=db.tickets.find(x=>x.id===id);hideAll();$('detail').classList.remove('hidden');let selected=t.shows.filter(s=>s.selected);$('detail').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('ticket')">← 一覧へ</button><h2 class="detail-title">${esc(t.name||'公演名未登録')}</h2><div class="chips"><span class="chip">📅 申込 ${dateText(t.period)}${t.periodEnd?' ～ '+dateText(t.periodEnd):''}</span><span class="chip">⏰ 期限 ${dateText(t.deadline)}</span><span class="chip">📣 当落 ${dateText(t.resultDate)}</span><span class="chip">💰 入金 ${dateText(t.payment)}</span></div><div class="section-title">🎪 公演スケジュール</div>${t.shows.map((s,i)=>`<div class="card"><div class="list-title">📅 ${dateText(s.date)}　📍 ${esc(s.pref||'')}　🏟️ ${esc(s.venue||'')}</div><div class="meta">🕐 ${esc(s.time||'')}　${s.selected?'🎫 申込済':'未申込'} ${s.selected?statusHtml(s.result):''}</div></div>`).join('')||'<div class="empty">公演スケジュール未登録</div>'}<div class="actions"><button class="primary" onclick="copyWon('${id}')">📖 当選公演を現場記録にコピー</button><button class="ghost" onclick="ticketForm('${id}')">編集</button></div></div>`}
+function copyWon(id){let t=db.tickets.find(x=>x.id===id),wins=t.shows.filter(s=>s.selected&&s.result==='win');if(!wins.length){toastMessage('当選公演がありません');return}wins.forEach(s=>db.events.push({id:uid(),name:t.name,date:s.date,pref:s.pref,venue:s.venue,seat:'',comment:'',photos:[],cover:0,hotelId:''}));persist();toast();setTimeout(()=>switchMain('event'),120)}
+function toastMessage(msg){let t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>{t.textContent='保存されました ✓';t.classList.remove('show')},1800)}
 
-function save() {
-  localStorage.setItem('FR_E', JSON.stringify(E));
-  localStorage.setItem('FR_H', JSON.stringify(H));
-  stats();
-}
+function renderEvents(){['subFuture','subPast','subCal'].forEach(id=>$(id).classList.remove('active'));$(eventMode==='future'?'subFuture':eventMode==='past'?'subPast':'subCal').classList.add('active');if(eventMode==='calendar')return renderCalendar();let today=isoToday();let arr=db.events.filter(e=>eventMode==='future'?(e.date||'')>=today:(e.date||'')<today).sort((a,b)=>(eventMode==='future'?(a.date||'').localeCompare(b.date||''):(b.date||'').localeCompare(a.date||'')));$('eventContent').innerHTML=`<div class="toolbar"><input id="eventSearch" class="search" placeholder="🔍 公演名・会場などを検索" oninput="filterEvents()"><select id="eventPref" onchange="filterEvents()"><option value="">都道府県：すべて</option>${[...new Set(db.events.map(e=>e.pref).filter(Boolean))].sort().map(p=>`<option>${esc(p)}</option>`).join('')}</select><select id="eventYear" onchange="filterEvents()"><option value="">年：すべて</option>${[...new Set(db.events.map(e=>(e.date||'').slice(0,4)).filter(Boolean))].sort().reverse().map(y=>`<option>${y}</option>`).join('')}</select></div><div id="eventList">${eventCards(arr)}</div>`}
+function filterEvents(){let q=($('eventSearch').value||'').toLowerCase(),p=$('eventPref').value,y=$('eventYear').value,today=isoToday();let arr=db.events.filter(e=>(eventMode==='future'?(e.date||'')>=today:(e.date||'')<today)&&(!q||[e.name,e.venue,e.pref,e.seat,e.comment].join(' ').toLowerCase().includes(q))&&(!p||e.pref===p)&&(!y||(e.date||'').startsWith(y))).sort((a,b)=>eventMode==='future'?(a.date||'').localeCompare(b.date||''):(b.date||'').localeCompare(a.date||''));$('eventList').innerHTML=eventCards(arr)}
+function eventCards(arr){return arr.length?arr.map(e=>`<div class="list-card" onclick="eventDetail('${e.id}')">${e.photos?.length?`<img class="thumb" src="${e.photos[e.cover??0]||e.photos[0]}">`:'<div class="thumb" style="display:grid;place-items:center;font-size:28px">📷</div>'}<div class="list-info"><div class="list-title">${esc(e.name||'公演名未登録')}</div><div class="meta">📅 ${dateText(e.date)}<br>📍 ${esc(e.pref||'')}　🏟️ ${esc(e.venue||'')}</div>${e.seat?`<div class="meta">🎫 ${esc(e.seat)}</div>`:''}</div></div>`).join(''):'<div class="card empty">該当する現場がありません🌷</div>'}
+function renderCalendar(){let y=calendarDate.getFullYear(),m=calendarDate.getMonth(),first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),s=['日','月','火','水','木','金','土'].map(x=>`<div class="dow">${x}</div>`).join('');for(let i=0;i<first;i++)s+='<div></div>';for(let d=1;d<=days;d++){let k=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,a=db.events.filter(e=>e.date===k);s+=`<div class="day ${a.length?(k>=isoToday()?'future':'has'):''}" ${a.length?`onclick="eventDetail('${a[0].id}')"`:''}>${d}${a.length?`<small>🎟️ ${esc(a[0].name||'').slice(0,8)}</small>`:''}</div>`}$('eventContent').innerHTML=`<div class="panel"><div class="calendar-head"><button class="ghost" onclick="calendarDate.setMonth(calendarDate.getMonth()-1);renderCalendar()">‹</button><b>${y}年${m+1}月</b><button class="ghost" onclick="calendarDate.setMonth(calendarDate.getMonth()+1);renderCalendar()">›</button></div><div class="cal-grid">${s}</div></div>`}
 
-function stats() {
-  let y = new Date().getFullYear();
-  $('sa').textContent = E.length;
-  $('sy').textContent = E.filter(x => x.date?.startsWith(y + '-')).length;
-  $('sp').textContent = new Set(E.map(x => x.pref).filter(Boolean)).size;
-  $('sh').textContent = H.length;
+function eventForm(id){let e=id?db.events.find(x=>x.id===id):{name:'',date:'',pref:'',venue:'',seat:'',comment:'',photos:[],cover:0,hotelId:''};currentPhotos=[...(e.photos||[])];cover=Math.min(e.cover??0,Math.max(0,currentPhotos.length-1));editor(id?'📖 現場を編集':'📖 現場を登録',`<div class="form"><label>公演名</label><input id="en" value="${esc(e.name)}"><label>公演日</label><input id="ed" type="date" value="${esc(e.date)}"><label>都道府県</label><input id="ep" value="${esc(e.pref)}"><label>会場</label><input id="ev" value="${esc(e.venue)}"><label>座席</label><input id="eseat" value="${esc(e.seat)}"><label>感想</label><textarea id="ec">${esc(e.comment)}</textarea><label>写真 <span class="hint">複数枚登録可／表紙を1枚選択できます</span></label><input id="files" type="file" accept="image/*" multiple onchange="addSelectedPhotos()"><div id="photoGrid" class="photo-grid">${photoEditorGrid()}</div><label>ホテル <span class="hint">宿泊記録から選択できます</span></label><select id="eh"><option value="">選択しない</option>${db.hotels.map(h=>`<option value="${h.id}" ${e.hotelId===h.id?'selected':''}>${esc(h.name||'ホテル名未登録')}</option>`).join('')}</select><div class="actions"><button class="ghost" onclick="switchMain('event')">キャンセル</button><button class="primary" onclick="saveEvent('${id||''}')">保存</button></div></div>`,'event')}
+function photoEditorGrid(){return currentPhotos.map((p,i)=>`<div class="photo-item ${i===cover?'cover':''}"><img src="${p}"><button onclick="setCover(${i});return false">${i===cover?'表紙':'表紙にする'}</button><button class="remove" onclick="removePhoto(${i});return false">削除</button></div>`).join('')}
+function setCover(i){cover=i;$('photoGrid').innerHTML=photoEditorGrid()}
+function removePhoto(i){currentPhotos.splice(i,1);if(!currentPhotos.length)cover=0;else if(cover===i)cover=0;else if(cover>i)cover--; $('photoGrid').innerHTML=photoEditorGrid()}
+function readFiles(fs){return Promise.all([...fs].map(f=>new Promise((resolve,reject)=>{let r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f)})))}
+async function addSelectedPhotos(){let input=$('files');if(!input.files.length)return;let added=await readFiles(input.files);currentPhotos.push(...added);input.value='';$('photoGrid').innerHTML=photoEditorGrid()}
+async function saveEvent(id){let o={id:id||uid(),name:$('en').value,date:$('ed').value,pref:$('ep').value,venue:$('ev').value,seat:$('eseat').value,comment:$('ec').value,photos:[...currentPhotos],cover:Math.min(cover,Math.max(0,currentPhotos.length-1)),hotelId:$('eh').value};let old=id&&db.events.find(x=>x.id===id);old?Object.assign(old,o):db.events.push(o);persist();toast();setTimeout(()=>eventDetail(o.id),120)}
+function eventDetail(id){let e=db.events.find(x=>x.id===id);if(!e)return;currentEventId=id;currentSlide=0;hideAll();$('detail').classList.remove('hidden');renderEventDetail()}
+function renderEventDetail(){let e=db.events.find(x=>x.id===currentEventId);if(!e)return;let p=e.photos||[];currentSlide=Math.max(0,Math.min(currentSlide,p.length-1));$('detail').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('event')">← 一覧へ</button><h2 class="detail-title">${esc(e.name||'公演名未登録')}</h2><div class="chips"><span class="chip">📅 ${dateText(e.date)}</span><span class="chip">📍 ${esc(e.pref||'')}</span><span class="chip">🏟️ ${esc(e.venue||'')}</span>${e.seat?`<span class="chip">🎫 ${esc(e.seat)}</span>`:''}</div>${p.length?`<div class="section-title">📷 写真</div><div class="carousel"><img id="detailPhoto" src="${p[currentSlide]}">${p.length>1?`<button class="arrow left" onclick="slide(-1)">‹</button><button class="arrow right" onclick="slide(1)">›</button>`:''}</div>${p.length>1?`<div class="dots">${currentSlide+1} / ${p.length}</div>`:''}`:''}<div class="section-title">💭 感想</div><div style="white-space:pre-wrap;line-height:1.9">${esc(e.comment||'—')}</div>${e.hotelId&&db.hotels.find(h=>h.id===e.hotelId)?`<div class="section-title">🏨 ホテル</div><div class="list-card" onclick="hotelDetail('${e.hotelId}')"><div class="list-info"><div class="list-title">${esc(db.hotels.find(h=>h.id===e.hotelId).name||'ホテル名未登録')}</div><div class="meta">宿泊記録を見る →</div></div></div>`:''}<div class="actions"><button class="ghost" onclick="eventForm('${e.id}')">編集</button><button class="dangerBtn" onclick="deleteEvent('${e.id}')">削除</button></div></div>`}
+function slide(d){let e=db.events.find(x=>x.id===currentEventId),p=e?.photos||[];if(p.length<2)return;currentSlide=(currentSlide+d+p.length)%p.length;renderEventDetail()}
+function deleteEvent(id){if(!confirm('この現場記録を削除しますか？'))return;db.events=db.events.filter(e=>e.id!==id);persist();toastMessage('削除しました');setTimeout(()=>switchMain('event'),120)}
 
-  let currentPf = $('pf').value;
-  let currentYf = $('yf').value;
+function renderHotels(){$('hotelList').innerHTML=db.hotels.length?db.hotels.map(h=>`<div class="card hotel-card" onclick="hotelDetail('${h.id}')"><div><div class="hotel-name">🏨 ${esc(h.name||'ホテル名未登録')}</div><div class="meta">📍 ${esc(h.pref||'')}　🚉 ${esc(h.station||'')} ${h.date?'　📅 '+dateText(h.date):''}</div></div><div class="stars">${'★'.repeat(Number(h.rating)||0)}${'☆'.repeat(5-(Number(h.rating)||0))}</div></div>`).join(''):'<div class="card empty">まだ宿泊記録がありません🏨</div>'}
+function hotelForm(id){let h=id?db.hotels.find(x=>x.id===id):{name:'',pref:'',station:'',date:'',price:'',rating:'',revisit:'◎ また泊まりたい',comment:''};editor(id?'🏨おとまりを編集':'🏨おとまり',`<div class="form"><label>ホテル名</label><input id="hn" value="${esc(h.name)}"><label>都道府県</label><input id="hp" value="${esc(h.pref)}"><label>最寄り駅</label><input id="hs" value="${esc(h.station)}"><label>宿泊日</label><input id="hd" type="date" value="${esc(h.date)}"><label>料金</label><input id="hprice" type="number" value="${esc(h.price)}"><label>満足度</label><select id="hr"><option value="">未評価</option>${[1,2,3,4,5].map(n=>`<option value="${n}" ${Number(h.rating)===n?'selected':''}>${'★'.repeat(n)}${'☆'.repeat(5-n)}</option>`).join('')}</select><label>また泊まりたい？</label><select id="hrev"><option>◎ また泊まりたい</option><option>△ 条件次第</option><option>× もう泊まらない</option></select><label>感想</label><textarea id="hc">${esc(h.comment)}</textarea><div class="actions"><button class="ghost" onclick="switchMain('hotel')">キャンセル</button><button class="primary" onclick="saveHotel('${id||''}')">保存</button></div></div>`,'hotel');$('hrev').value=h.revisit||'◎ また泊まりたい'}
+function saveHotel(id){let o={id:id||uid(),name:$('hn').value,pref:$('hp').value,station:$('hs').value,date:$('hd').value,price:$('hprice').value,rating:$('hr').value,revisit:$('hrev').value,comment:$('hc').value};let old=id&&db.hotels.find(x=>x.id===id);old?Object.assign(old,o):db.hotels.push(o);persist();toast();setTimeout(()=>switchMain('hotel'),120)}
+function hotelDetail(id){let h=db.hotels.find(x=>x.id===id);hideAll();$('detail').classList.remove('hidden');$('detail').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('hotel')">← ホテル一覧</button><h2 class="detail-title">🏨 ${esc(h.name||'ホテル名未登録')}</h2><div class="chips"><span class="chip">📍 ${esc(h.pref||'')}</span>${h.station?`<span class="chip">🚉 ${esc(h.station)}</span>`:''}${h.date?`<span class="chip">📅 ${dateText(h.date)}</span>`:''}${h.price?`<span class="chip">💰 ${esc(h.price)}円</span>`:''}</div><div class="section-title">⭐ 満足度</div><div class="stars" style="font-size:24px">${'★'.repeat(Number(h.rating)||0)}${'☆'.repeat(5-(Number(h.rating)||0))}</div><div class="section-title">💭 感想</div><div style="white-space:pre-wrap;line-height:1.9">${esc(h.comment||'—')}</div><div class="section-title">また泊まりたい？</div><div>${esc(h.revisit||'—')}</div><div class="actions"><button class="ghost" onclick="hotelForm('${id}')">編集</button><button class="dangerBtn" onclick="deleteHotel('${id}')">削除</button></div></div>`}
+function deleteHotel(id){if(!confirm('この宿泊記録を削除しますか？'))return;db.hotels=db.hotels.filter(h=>h.id!==id);db.events.forEach(e=>{if(e.hotelId===id)e.hotelId=''});persist();toastMessage('削除しました');setTimeout(()=>switchMain('hotel'),120)}
 
-  let p = [...new Set(E.map(x => x.pref).filter(Boolean))].sort();
-  let ys = [...new Set(E.map(x => x.date?.slice(0, 4)).filter(Boolean))].sort().reverse();
-
-  $('pf').innerHTML = '<option value="">都道府県：すべて</option>' + p.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join('');
-  $('yf').innerHTML = '<option value="">年：すべて</option>' + ys.map(x => `<option value="${x}">${x}</option>`).join('');
-
-  $('pf').value = currentPf;
-  $('yf').value = currentYf;
-}
-
-function tab(x) {
-  showView(x === 'e' ? 'events' : 'hotels');
-  $('te').classList.toggle('active', x === 'e');
-  $('th').classList.toggle('active', x === 'h');
-  if (x === 'e') render(); else renderH();
-}
-
-function render() {
-  stats();
-  let s = $('q').value.toLowerCase();
-  let p = $('pf').value;
-  let y = $('yf').value;
-
-  let a = E.filter(e => 
-    (!s || [e.name, e.venue, e.pref, e.seat, e.comment].join(' ').toLowerCase().includes(s)) &&
-    (!p || e.pref === p) &&
-    (!y || e.date?.startsWith(y))
-  ).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-
-  $('list').innerHTML = a.length ? a.map(e => `
-    <div class="card" onclick="detail('${e.id}')">
-      <div class="row">
-        ${e.photos?.[0] ? `<img class="thumb" src="${e.photos[0]}">` : '<div class="thumb">📸</div>'}
-        <div>
-          <h3>${esc(e.name)}</h3>
-          <div class="meta">${date(e.date)}　${esc(e.pref)}｜${esc(e.venue)}</div>
-          <div class="meta">🎫 ${esc(e.seat)}</div>
-        </div>
-      </div>
-    </div>
-  `).join('') : '<div class="empty">まだ現場の記録がありません🌷</div>';
-}
-
-function detail(id) {
-  let e = E.find(x => x.id === id);
-  if (!e) return tab('e');
-  let h = H.find(x => x.id === e.hotelId);
-
-  showView('detail');
-  $('detail').innerHTML = `
-    <div class="panel">
-      <button class="ghost" onclick="tab('e')">← 一覧へ</button>
-      <h2 style="margin-top:15px">${esc(e.name)}</h2>
-      <div class="chips">
-        <span class="chip">📅 ${date(e.date)}</span>
-        <span class="chip">📍 ${esc(e.pref)}</span>
-        <span class="chip">🏟 ${esc(e.venue)}</span>
-        <span class="chip">🎫 ${esc(e.seat)}</span>
-      </div>
-      ${e.photos?.length ? e.photos.map(p => `<img class="detailPhoto" src="${p}">`).join('') : ''}
-      <h2 style="margin-top:20px">💭 感想</h2>
-      <div style="white-space:pre-wrap;line-height:1.8">${esc(e.comment || '—')}</div>
-      ${h ? `
-        <h2 style="margin-top:20px">🏨 HOTEL</h2>
-        <div class="hotelbox">
-          <b>${esc(h.name)}</b>
-          <div class="meta">⭐ ${'★'.repeat(h.rating || 0)}${'☆'.repeat(5 - (h.rating || 0))}　${esc(h.revisit || '')}</div>
-          <div>${esc(h.comment || '')}</div>
-        </div>
-      ` : ''}
-      <div class="actions">
-        <button class="ghost" onclick="eventForm('${e.id}')">編集</button>
-        <button class="ghost" onclick="delE('${e.id}')">削除</button>
-      </div>
-    </div>
-  `;
-}
-
-function eventForm(id) {
-  let e = id ? E.find(x => x.id === id) : {date:'', pref:'', venue:'', name:'', seat:'', comment:'', photos:[], hotelId:''};
-  showView('ef');
-  $('ef').innerHTML = `
-    <h2>${id ? '現場を編集' : '🎫 現場を登録'}</h2>
-    <div class="form">
-      <label>日付 *</label>
-      <input id="fd" type="date" value="${esc(e.date)}">
-      <label>都道府県 *</label>
-      <input id="fp" value="${esc(e.pref)}" placeholder="大阪府">
-      <label>会場 *</label>
-      <input id="fv" value="${esc(e.venue)}" placeholder="大阪城ホール">
-      <label>公演名 *</label>
-      <input id="fn" value="${esc(e.name)}">
-      <label>座席 *</label>
-      <input id="fs" value="${esc(e.seat)}">
-      <label>感想 *</label>
-      <textarea id="fc">${esc(e.comment)}</textarea>
-      <label>写真</label>
-      <input id="fi" type="file" accept="image/*" multiple>
-      <label>紐付けるホテル（任意）</label>
-      <select id="fh">
-        <option value="">なし</option>
-        ${H.map(h => `<option value="${h.id}" ${e.hotelId === h.id ? 'selected' : ''}>${esc(h.name)}</option>`).join('')}
-      </select>
-      <div class="actions">
-        <button class="ghost" onclick="tab('e')">キャンセル</button>
-        <button class="primary" onclick="saveE('${id || ''}')">保存</button>
-      </div>
-    </div>
-  `;
-}
-
-async function pics(files) {
-  return Promise.all([...files].map(f => new Promise(r => {
-    let x = new FileReader();
-    x.onload = () => r(x.result);
-    x.readAsDataURL(f);
-  })));
-}
-
-async function saveE(id) {
-  let fdv = $('fd'), fpv = $('fp'), fvv = $('fv'), fnv = $('fn'), fsv = $('fs'), fcv = $('fc'), fiv = $('fi'), fhv = $('fh');
-  if (!fdv.value || !fpv.value || !fvv.value || !fnv.value || !fsv.value || !fcv.value) {
-    return alert('必須項目を入力してね');
-  }
-  let old = id && E.find(x => x.id === id);
-  let ps = old?.photos || [];
-  if (fiv.files.length) {
-    ps = await pics(fiv.files);
-  }
-  let o = {
-    id: id || Date.now().toString(),
-    date: fdv.value,
-    pref: fpv.value,
-    venue: fvv.value,
-    name: fnv.value,
-    seat: fsv.value,
-    comment: fcv.value,
-    photos: ps,
-    hotelId: fhv.value
-  };
-  if (old) Object.assign(old, o); else E.push(o);
-  save();
-  detail(o.id);
-}
-
-function delE(id) {
-  if (confirm('この現場を削除する？')) {
-    E = E.filter(x => x.id !== id);
-    save();
-    tab('e');
-  }
-}
-
-function renderH() {
-  $('hlist').innerHTML = H.length ? H.map(h => `
-    <div class="card" onclick="detailH('${h.id}')">
-      <h3>🏨 ${esc(h.name)}</h3>
-      <div class="meta">${esc(h.pref)}　${esc(h.station)}</div>
-      <div class="meta">⭐ ${'★'.repeat(h.rating || 0)}${'☆'.repeat(5 - (h.rating || 0))}　${esc(h.revisit || '')}</div>
-    </div>
-  `).join('') : '<div class="empty">まだホテルの記録がありません🏨</div>';
-}
-
-function detailH(id) {
-  let h = H.find(x => x.id === id);
-  if (!h) return tab('h');
-  let u = E.filter(e => e.hotelId === id);
-
-  showView('detail');
-  $('detail').innerHTML = `
-    <div class="panel">
-      <button class="ghost" onclick="tab('h')">← ホテル一覧</button>
-      <h2 style="margin-top:15px">🏨 ${esc(h.name)}</h2>
-      <div class="chips">
-        <span class="chip">📍 ${esc(h.pref)}</span>
-        <span class="chip">🚉 ${esc(h.station)}</span>
-        <span class="chip">💰 ${esc(h.price)}円</span>
-        <span class="chip">⭐ ${'★'.repeat(h.rating || 0)}${'☆'.repeat(5 - (h.rating || 0))}</span>
-      </div>
-      <h2 style="margin-top:20px">💭 感想</h2>
-      <div style="white-space:pre-wrap">${esc(h.comment || '—')}</div>
-      <h2 style="margin-top:20px">🎫 利用した現場</h2>
-      ${u.length ? u.map(e => `<div class="hotelbox">${esc(e.name)}｜${date(e.date)}</div>`).join('') : '<div class="meta">まだ現場と紐付いていません</div>'}
-      <div class="actions">
-        <button class="ghost" onclick="hotelForm('${h.id}')">編集</button>
-        <button class="ghost" onclick="delH('${h.id}')">削除</button>
-      </div>
-    </div>
-  `;
-}
-
-function hotelForm(id) {
-  let h = id ? H.find(x => x.id === id) : {name:'', pref:'', station:'', date:'', price:'', rating:0, revisit:'◎ また泊まりたい', comment:''};
-  rating = h.rating || 0;
-  showView('hf');
-  $('hf').innerHTML = `
-    <h2>${id ? 'ホテルを編集' : '🏨 ホテルを登録'}</h2>
-    <div class="form">
-      <label>ホテル名 *</label>
-      <input id="hn" value="${esc(h.name)}">
-      <label>都道府県</label>
-      <input id="hp" value="${esc(h.pref)}">
-      <label>最寄り駅</label>
-      <input id="hs" value="${esc(h.station)}">
-      <label>宿泊日</label>
-      <input id="hd" type="date" value="${esc(h.date)}">
-      <label>料金（円）</label>
-      <input id="hprice" type="number" value="${esc(h.price)}">
-      <label>満足度</label>
-      <div class="stars" id="st">${[1,2,3,4,5].map(i => `<span onclick="setR(${i})">${i <= rating ? '★' : '☆'}</span>`).join('')}</div>
-      <label>また泊まりたい？</label>
-      <select id="hr">
-        <option ${h.revisit === '◎ また泊まりたい' ? 'selected' : ''}>◎ また泊まりたい</option>
-        <option ${h.revisit === '△ 条件次第' ? 'selected' : ''}>△ 条件次第</option>
-        <option ${h.revisit === '× もう泊まらない' ? 'selected' : ''}>× もう泊まらない</option>
-      </select>
-      <label>感想</label>
-      <textarea id="hc">${esc(h.comment)}</textarea>
-      <div class="actions">
-        <button class="ghost" onclick="tab('h')">キャンセル</button>
-        <button class="primary" onclick="saveH('${id || ''}')">保存</button>
-      </div>
-    </div>
-  `;
-}
-
-function setR(n) {
-  rating = n;
-  $('st').innerHTML = [1,2,3,4,5].map(i => `<span onclick="setR(${i})">${i <= n ? '★' : '☆'}</span>`).join('');
-}
-
-function saveH(id) {
-  let hnv = $('hn'), hpv = $('hp'), hsv = $('hs'), hdv = $('hd'), hpv2 = $('hprice'), hrv = $('hr'), hcv = $('hc');
-  if (!hnv.value) return alert('ホテル名を入力してね');
-  let old = id && H.find(x => x.id === id);
-  let o = {
-    id: id || Date.now().toString(),
-    name: hnv.value,
-    pref: hpv.value,
-    station: hsv.value,
-    date: hdv.value,
-    price: hpv2.value,
-    rating,
-    revisit: hrv.value,
-    comment: hcv.value
-  };
-  if (old) Object.assign(old, o); else H.push(o);
-  save();
-  detailH(o.id);
-}
-
-function delH(id) {
-  if (confirm('このホテルを削除する？')) {
-    H = H.filter(x => x.id !== id);
-    E.forEach(e => { if (e.hotelId === id) e.hotelId = ''; });
-    save();
-    tab('h');
-  }
-}
-
-stats();
-render();
+updateStats();switchMain('event');
 </script>
-</body>
-</html>
+</body></html>
