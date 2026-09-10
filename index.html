@@ -51,6 +51,16 @@ main{max-width:760px;margin:auto;padding:20px 16px 50px}
 <script>
 const KEY='field_album_v4';
 let db=loadDB();let eventMode='future';let currentPhotos=[];let cover=0;let currentEventId='';let currentSlide=0;let calendarDate=new Date();
+
+function showToast(message){
+  const el=document.getElementById('toast');
+  if(!el)return;
+  el.textContent=message;
+  el.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer=setTimeout(()=>el.classList.remove('show'),1800);
+}
+
 function loadDB(){try{let d=JSON.parse(localStorage.getItem(KEY)||'');return {tickets:Array.isArray(d.tickets)?d.tickets:[],events:Array.isArray(d.events)?d.events:[],hotels:Array.isArray(d.hotels)?d.hotels:[]}}catch{return {tickets:[],events:[],hotels:[]}}}
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
@@ -88,17 +98,39 @@ function setCover(i){cover=i;$('photoGrid').innerHTML=photoEditorGrid()}
 function removePhoto(i){currentPhotos.splice(i,1);if(!currentPhotos.length)cover=0;else if(cover===i)cover=0;else if(cover>i)cover--; $('photoGrid').innerHTML=photoEditorGrid()}
 function readFiles(fs){return Promise.all([...fs].map(f=>new Promise((resolve,reject)=>{let r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f)})))}
 async function addSelectedPhotos(){let input=$('files');if(!input.files.length)return;let added=await readFiles(input.files);currentPhotos.push(...added);input.value='';$('photoGrid').innerHTML=photoEditorGrid()}
-async function saveEvent(id){let o={id:id||uid(),time:document.getElementById('etime')?.value||'',name:$('en').value,date:$('ed').value,pref:$('ep').value,venue:$('ev').value,seat:$('eseat').value,comment:$('ec').value,photos:[...currentPhotos],cover:Math.min(cover,Math.max(0,currentPhotos.length-1)),hotelId:$('eh').value};let old=id&&db.events.find(x=>x.id===id);old?Object.assign(old,o):db.events.push(o);persist();complete('event','保存しました')}
+async function saveEvent(id){let o={id:id||uid(),time:document.getElementById('etime')?.value||'',name:$('en').value,date:$('ed').value,pref:$('ep').value,venue:$('ev').value,seat:$('eseat').value,comment:$('ec').value,photos:[...currentPhotos],cover:Math.min(cover,Math.max(0,currentPhotos.length-1)),hotelId:$('eh').value};let old=id&&db.events.find(x=>x.id===id);old?Object.assign(old,o):db.events.push(o);persist();complete('event','保存しました')
+  switchMain('event');
+  requestAnimationFrame(()=>showToast('保存しました'));
+}
 function eventDetail(id){let e=db.events.find(x=>x.id===id);if(!e)return;currentEventId=id;currentSlide=0;hideAll();$('detail').classList.remove('hidden');renderEventDetail()}
-function renderEventDetail(){let e=db.events.find(x=>x.id===currentEventId);if(!e)return;let p=e.photos||[];currentSlide=Math.max(0,Math.min(currentSlide,p.length-1));$('detail').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('event')">← 一覧へ</button><h2 class="detail-title">${esc(e.name||'公演名未登録')}</h2><div class="chips"><span class="chip">📅 ${dateText(e.date)}</span>${e.time?`<span class="chip">🕐 ${esc(e.time)}</span>`:''}<span class="chip">📍 ${esc(e.pref||'')}</span><span class="chip">🏟️ ${esc(e.venue||'')}</span>${e.seat?`<span class="chip">🎫 ${esc(e.seat)}</span>`:''}</div>${p.length?`<div class="section-title">📷 写真</div><div class="carousel"><img id="detailPhoto" src="${p[currentSlide]}">${p.length>1?`<button class="arrow left" onclick="slide(-1)">‹</button><button class="arrow right" onclick="slide(1)">›</button>`:''}</div>${p.length>1?`<div class="dots">${currentSlide+1} / ${p.length}</div>`:''}`:''}<div class="section-title">💭 感想</div><div style="white-space:pre-wrap;line-height:1.9">${esc(e.comment||'—')}</div>${e.hotelId&&db.hotels.find(h=>h.id===e.hotelId)?`<div class="section-title">🏨 ホテル</div><div class="list-card" onclick="hotelDetail('${e.hotelId}')"><div class="list-info"><div class="list-title">${esc(db.hotels.find(h=>h.id===e.hotelId).name||'ホテル名未登録')}</div><div class="meta">宿泊記録を見る →</div></div></div>`:''}<div class="actions"><button class="ghost" onclick="eventForm('${e.id}')">編集</button><button type="button" class="dangerBtn" onclick="event.preventDefault();event.stopPropagation();deleteEvent('${e.id}')">削除</button></div></div>`}
+function renderEventDetail(){let e=db.events.find(x=>x.id===currentEventId);if(!e)return;let p=e.photos||[];currentSlide=Math.max(0,Math.min(currentSlide,p.length-1));$('detail').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('event')">← 一覧へ</button><h2 class="detail-title">${esc(e.name||'公演名未登録')}</h2><div class="chips"><span class="chip">📅 ${dateText(e.date)}</span>${e.time?`<span class="chip">🕐 ${esc(e.time)}</span>`:''}<span class="chip">📍 ${esc(e.pref||'')}</span><span class="chip">🏟️ ${esc(e.venue||'')}</span>${e.seat?`<span class="chip">🎫 ${esc(e.seat)}</span>`:''}</div>${p.length?`<div class="section-title">📷 写真</div><div class="carousel"><img id="detailPhoto" src="${p[currentSlide]}">${p.length>1?`<button class="arrow left" onclick="slide(-1)">‹</button><button class="arrow right" onclick="slide(1)">›</button>`:''}</div>${p.length>1?`<div class="dots">${currentSlide+1} / ${p.length}</div>`:''}`:''}<div class="section-title">💭 感想</div><div style="white-space:pre-wrap;line-height:1.9">${esc(e.comment||'—')}</div>${e.hotelId&&db.hotels.find(h=>h.id===e.hotelId)?`<div class="section-title">🏨 ホテル</div><div class="list-card" onclick="hotelDetail('${e.hotelId}')"><div class="list-info"><div class="list-title">${esc(db.hotels.find(h=>h.id===e.hotelId).name||'ホテル名未登録')}</div><div class="meta">宿泊記録を見る →</div></div></div>`:''}<div class="actions"><button class="ghost" onclick="eventForm('${e.id}')">編集</button><button class="dangerBtn" onclick="deleteEvent('${e.id}')">削除</button></div></div>`}
 function slide(d){let e=db.events.find(x=>x.id===currentEventId),p=e?.photos||[];if(p.length<2)return;currentSlide=(currentSlide+d+p.length)%p.length;renderEventDetail()}
-function deleteEvent(id){if(!id)return;if(!confirm('この現場記録を削除しますか？'))return;db.events=db.events.filter(e=>e.id!==id);persist();currentEventId=null;switchMain('event');requestAnimationFrame(()=>toastMessage('削除しました'));}
+function deleteEvent(id){
+  if(!id)return;
+  if(!confirm('この現場記録を削除しますか？'))return;
+  db.events=db.events.filter(e=>e.id!==id);
+  persist();
+  currentEventId=null;
+  switchMain('event');
+  requestAnimationFrame(()=>showToast('削除しました'));
+}
 
 function renderHotels(){$('hotelList').innerHTML=db.hotels.length?db.hotels.map(h=>`<div class="card hotel-card" onclick="hotelDetail('${h.id}')"><div><div class="hotel-name">🏨 ${esc(h.name||'ホテル名未登録')}</div><div class="meta">📍 ${esc(h.pref||'')}　🚉 ${esc(h.station||'')} ${h.date?'　📅 '+dateText(h.date):''}</div></div><div class="stars">${'★'.repeat(Number(h.rating)||0)}${'☆'.repeat(5-(Number(h.rating)||0))}</div></div>`).join(''):'<div class="card empty">まだ宿泊記録がありません🏨</div>'}
 function hotelForm(id){let h=id?db.hotels.find(x=>x.id===id):{name:'',pref:'',station:'',date:'',price:'',rating:'',revisit:'◎ また泊まりたい',comment:''};editor(id?'🏨おとまりを編集':'🏨おとまり',`<div class="form"><label>ホテル名</label><input id="hn" value="${esc(h.name)}"><label>都道府県</label><input id="hp" value="${esc(h.pref)}"><label>最寄り駅</label><input id="hs" value="${esc(h.station)}"><label>宿泊日</label><input id="hd" type="date" value="${esc(h.date)}"><label>料金</label><input id="hprice" type="number" value="${esc(h.price)}"><label>満足度</label><select id="hr"><option value="">未評価</option>${[1,2,3,4,5].map(n=>`<option value="${n}" ${Number(h.rating)===n?'selected':''}>${'★'.repeat(n)}${'☆'.repeat(5-n)}</option>`).join('')}</select><label>また泊まりたい？</label><select id="hrev"><option>◎ また泊まりたい</option><option>△ 条件次第</option><option>× もう泊まらない</option></select><label>感想</label><textarea id="hc">${esc(h.comment)}</textarea><div class="actions"><button class="ghost" onclick="switchMain('hotel')">キャンセル</button><button class="primary" onclick="saveHotel('${id||''}')">保存</button></div></div>`,'hotel');$('hrev').value=h.revisit||'◎ また泊まりたい'}
-function saveHotel(id){let o={id:id||uid(),name:$('hn').value,pref:$('hp').value,station:$('hs').value,date:$('hd').value,price:$('hprice').value,rating:$('hr').value,revisit:$('hrev').value,comment:$('hc').value};let old=id&&db.hotels.find(x=>x.id===id);old?Object.assign(old,o):db.hotels.push(o);persist();complete('hotel','保存しました')}
-function hotelDetail(id){let h=db.hotels.find(x=>x.id===id);hideAll();$('detail').classList.remove('hidden');$('detail').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('hotel')">← ホテル一覧</button><h2 class="detail-title">🏨 ${esc(h.name||'ホテル名未登録')}</h2><div class="chips"><span class="chip">📍 ${esc(h.pref||'')}</span>${h.station?`<span class="chip">🚉 ${esc(h.station)}</span>`:''}${h.date?`<span class="chip">📅 ${dateText(h.date)}</span>`:''}${h.price?`<span class="chip">💰 ${esc(h.price)}円</span>`:''}</div><div class="section-title">⭐ 満足度</div><div class="stars" style="font-size:24px">${'★'.repeat(Number(h.rating)||0)}${'☆'.repeat(5-(Number(h.rating)||0))}</div><div class="section-title">💭 感想</div><div style="white-space:pre-wrap;line-height:1.9">${esc(h.comment||'—')}</div><div class="section-title">また泊まりたい？</div><div>${esc(h.revisit||'—')}</div><div class="actions"><button class="ghost" onclick="hotelForm('${id}')">編集</button><button type="button" class="dangerBtn" onclick="event.preventDefault();event.stopPropagation();deleteHotel('${id}')">削除</button></div></div>`}
-function deleteHotel(id){if(!id)return;if(!confirm('この宿泊記録を削除しますか？'))return;db.hotels=db.hotels.filter(h=>h.id!==id);db.events.forEach(e=>{if(e.hotelId===id)e.hotelId=''});persist();switchMain('hotel');requestAnimationFrame(()=>toastMessage('削除しました'));});persist();complete('hotel','削除しました')}
+function saveHotel(id){let o={id:id||uid(),name:$('hn').value,pref:$('hp').value,station:$('hs').value,date:$('hd').value,price:$('hprice').value,rating:$('hr').value,revisit:$('hrev').value,comment:$('hc').value};let old=id&&db.hotels.find(x=>x.id===id);old?Object.assign(old,o):db.hotels.push(o);persist();complete('hotel','保存しました')
+  switchMain('hotel');
+  requestAnimationFrame(()=>showToast('保存しました'));
+}
+function hotelDetail(id){let h=db.hotels.find(x=>x.id===id);hideAll();$('detail').classList.remove('hidden');$('detail').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('hotel')">← ホテル一覧</button><h2 class="detail-title">🏨 ${esc(h.name||'ホテル名未登録')}</h2><div class="chips"><span class="chip">📍 ${esc(h.pref||'')}</span>${h.station?`<span class="chip">🚉 ${esc(h.station)}</span>`:''}${h.date?`<span class="chip">📅 ${dateText(h.date)}</span>`:''}${h.price?`<span class="chip">💰 ${esc(h.price)}円</span>`:''}</div><div class="section-title">⭐ 満足度</div><div class="stars" style="font-size:24px">${'★'.repeat(Number(h.rating)||0)}${'☆'.repeat(5-(Number(h.rating)||0))}</div><div class="section-title">💭 感想</div><div style="white-space:pre-wrap;line-height:1.9">${esc(h.comment||'—')}</div><div class="section-title">また泊まりたい？</div><div>${esc(h.revisit||'—')}</div><div class="actions"><button class="ghost" onclick="hotelForm('${id}')">編集</button><button class="dangerBtn" onclick="deleteHotel('${id}')">削除</button></div></div>`}
+function deleteHotel(id){
+  if(!id)return;
+  if(!confirm('この宿泊記録を削除しますか？'))return;
+  db.hotels=db.hotels.filter(h=>h.id!==id);
+  db.events.forEach(e=>{if(e.hotelId===id)e.hotelId=''});
+  persist();
+  switchMain('hotel');
+  requestAnimationFrame(()=>showToast('削除しました'));
+}
 
 updateStats();switchMain('event');
 </script>
