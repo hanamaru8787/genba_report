@@ -184,15 +184,35 @@ function switchMain(x){hideAll();['tabTicket','tabEvent','tabHotel'].forEach(id=
 function editor(title,html,back){hideAll();$('editor').classList.remove('hidden');$('editor').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('${back}')">← 戻る</button><h2>${title}</h2>${html}</div>`;hydrateEditorPhotos($('editor'))}
 function statusHtml(s){if(s==='win')return '<span class="status win">🎉 当選</span>';if(s==='lose')return '<span class="status lose">落選</span>';if(s==='wait')return '<span class="status wait">⏳ 当落待ち</span>';return '<span class="status none">未登録</span>'}
 
+function photoCandidates(value){
+  if(value==null)return [];
+  if(typeof value==='string')return value.trim()?[value.trim()]:[];
+  if(typeof value!=='object')return [];
+  const keys=['dataUrl','dataURL','data','src','url','base64','image','photo','imageData','imageUrl'];
+  const out=[];
+  for(const k of keys){
+    const v=value[k];
+    if(typeof v==='string'&&v.trim()&&!out.includes(v.trim()))out.push(v.trim());
+  }
+  return out;
+}
 function applyPhotoSrc(img, value){
-  if(!img) return;
-  let src=value;
-  if(src && typeof src==='object') src=src.dataUrl||src.dataURL||src.data||src.src||src.url||'';
-  if(typeof src!=='string') src='';
-  if(!src){img.removeAttribute('src');return;}
-  // Photo data is assigned through the DOM property, not embedded in HTML.
-  // Existing localStorage photo strings are kept exactly as they are.
-  img.src=src;
+  if(!img)return;
+  const candidates=photoCandidates(value);
+  if(!candidates.length){img.removeAttribute('src');return;}
+  let i=0;
+  const tryNext=()=>{
+    if(i>=candidates.length){
+      img.removeAttribute('src');
+      img.dataset.photoError='true';
+      return;
+    }
+    const src=candidates[i++];
+    img.dataset.photoError='false';
+    img.src=src;
+  };
+  img.onerror=tryNext;
+  tryNext();
 }
 function hydrateEventPhotos(root){
   if(!root) return;
