@@ -176,7 +176,7 @@ function loadDB(){
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2);
-const isoToday=()=>new Date().toISOString().slice(0,10);
+const isoToday=()=>{const d=new Date();const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);const get=t=>parts.find(p=>p.type===t)?.value||'';return `${get('year')}-${get('month')}-${get('day')}`;};
 const dateText=s=>s?new Date(s+'T00:00:00').toLocaleDateString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit'}):'';
 function persist(){
   const payload=JSON.stringify({tickets:db.tickets,events:db.events.map(e=>({ ...e, photos:Array.isArray(e.photos)?e.photos.slice():[] })),hotels:db.hotels});
