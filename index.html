@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>おしろぐ｜oshi log</title>
+<style>
+:root{
+  color-scheme:light;
+  --canvas:#fbf8fb;
+  --surface:#ffffff;
+  --surface-soft:#f7f1f7;
+  --surface-lilac:#f2eef9;
+  --rose:#c8759e;
+  --rose-deep:#a95c83;
+  --rose-wash:#f8eaf2;
+  --ink:#413944;
+  --ink-soft:#746b77;
+  --muted:#99909d;
+  --line:#e9e1e9;
+  --line-strong:#ded3e0;
+  --danger:#a95e70;
+  --radius-card:18px;
+  --radius-control:12px;
+  --shadow-card:0 5px 18px rgba(67,48,72,.045);
+  --focus:0 0 0 3px rgba(200,117,158,.16);
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--canvas);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;font-size:14px;line-height:1.65;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:none;box-shadow:var(--focus);border-color:#d7a0bc}
+header{padding:23px 18px 0;background:linear-gradient(180deg,#fffafd 0%,#fbf8fb 100%)}
+header .inner{max-width:720px;margin:0 auto;display:flex;align-items:baseline;gap:11px;padding:0 2px 18px}
+.logo-title{margin:0;font-size:29px;line-height:1.1;letter-spacing:.045em;font-weight:650;color:#4b3f4c}
+.logo-sub{color:#a18d9f;font-size:10px;letter-spacing:.19em;font-weight:500;text-transform:lowercase}
+main{max-width:720px;margin:0 auto;padding:0 18px 48px}
+.main-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:0 auto 22px;padding:7px;max-width:720px;background:#f0eaf2;border:1px solid #e9e0eb;border-radius:17px}
+.main-tabs button{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;min-height:58px;padding:9px 7px;border:1px solid transparent;border-radius:12px;background:transparent;color:#766b79;font-size:13px;font-weight:550;letter-spacing:.015em;white-space:nowrap;cursor:pointer;transition:background .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease}
+.main-tabs button svg{width:21px;height:21px;flex:0 0 21px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.main-tabs button.active{background:#fff;color:var(--rose-deep);border-color:#f0dce7;box-shadow:0 2px 7px rgba(88,54,79,.055)}
+.main-tabs button:active{transform:translateY(1px)}
+.sub-tabs{display:flex;gap:6px;overflow-x:auto;margin:0 0 17px;padding:4px 0;scrollbar-width:none}
+.sub-tabs::-webkit-scrollbar{display:none}
+.sub-tabs button{border:1px solid transparent;white-space:nowrap;border-radius:10px;padding:9px 15px;background:transparent;color:var(--ink-soft);font-size:13px;font-weight:500;cursor:pointer}
+.sub-tabs button.active{background:var(--rose-wash);border-color:#efd9e5;color:var(--rose-deep);font-weight:650}
+.card,.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow-card)}
+.card{padding:16px;margin-bottom:11px}
+.panel{padding:20px;margin-bottom:16px}
+.toolbar{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.toolbar .search{grid-column:1/-1}
+.toolbar input,.toolbar select,.form input,.form select,.form textarea{width:100%;min-width:0;min-height:45px;border:1px solid var(--line-strong);border-radius:var(--radius-control);padding:10px 12px;background:#fff;color:var(--ink);font:inherit;font-size:14px;transition:border-color .16s ease,box-shadow .16s ease}
+.toolbar input::placeholder,.form input::placeholder{color:#aaa1ac}
+.form input[type=checkbox],.checkline input{accent-color:var(--rose)}
+.form textarea{min-height:115px;resize:vertical;line-height:1.7}
+.list-card{display:flex;gap:14px;align-items:center;padding:12px;border-radius:16px;background:var(--surface);border:1px solid var(--line);box-shadow:none;margin-bottom:9px;cursor:pointer;transition:border-color .16s ease,background .16s ease}
+.list-card:active,.ticket-card:active,.hotel-card:active{background:#fffafd;border-color:#d9b8cc}
+.thumb{width:88px;height:88px;flex:0 0 88px;border-radius:12px;object-fit:cover;background:var(--surface-soft)}
+.list-info{min-width:0;flex:1}
+.list-title{font-weight:650;font-size:15px;line-height:1.5;letter-spacing:.005em;color:var(--ink);overflow-wrap:anywhere}
+.meta{color:var(--muted);font-size:12px;line-height:1.7;font-weight:400;overflow-wrap:anywhere}
+.empty{text-align:center;color:var(--muted);padding:34px 12px;font-size:13px}
+.primary,.ghost,.dangerBtn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;border:1px solid transparent;border-radius:12px;padding:11px 16px;font-size:13px;font-weight:600;letter-spacing:.01em;cursor:pointer;transition:background .16s ease,border-color .16s ease,transform .16s ease}
+.primary{background:var(--rose);color:#fff;border-color:var(--rose)}
+.primary:hover{background:#bd6b94;border-color:#bd6b94}
+.ghost{background:#fff;color:#6d6270;border-color:var(--line-strong)}
+.ghost:hover{background:var(--surface-soft)}
+.dangerBtn{background:#fff7f8;color:var(--danger);border-color:#f0dce1}
+.dangerBtn:hover{background:#fcedf0}
+.full{width:100%;margin-top:4px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:18px}
+.hint{font-size:12px;color:var(--muted);font-weight:400}
+.hidden{display:none!important}
+.detail-head{margin-top:15px}
+.detail-title{font-size:23px;line-height:1.45;font-weight:650;letter-spacing:.005em;margin:14px 0 16px;overflow-wrap:anywhere}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;background:#f6eff6;border:1px solid #eee4ef;border-radius:9px;padding:6px 9px;color:#756879;font-size:12px;line-height:1.45}
+.section-title{font-size:15px;font-weight:650;letter-spacing:.005em;color:#554858;margin:22px 0 10px}
+.carousel{position:relative;margin-top:14px}
+.carousel img{display:block;width:100%;max-height:560px;object-fit:contain;border-radius:14px;background:#f7f3f7}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);border:0;background:#4a3b4a88!important;color:#fff;text-shadow:none;font-size:34px;line-height:1;padding:10px 9px;border-radius:10px}
+.arrow.left{left:8px}.arrow.right{right:8px}
+.dots{text-align:center;color:var(--muted);font-size:12px;margin-top:8px}
+.photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:10px}
+.photo-item{position:relative;min-width:0}
+.photo-item img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:11px;display:block}
+.photo-item button{position:absolute;left:5px;bottom:5px;border:1px solid #e9e0e8;border-radius:7px;padding:5px 7px;background:#ffffffed;color:#655b65;font-size:10px;font-weight:550}
+.photo-item.cover img{outline:2px solid var(--rose);outline-offset:1px}
+.photo-item .remove{right:5px;left:auto;background:#ffffffed;color:var(--danger)}
+.form{display:grid;gap:9px}
+.form label{font-size:12px;font-weight:600;color:#655a68;margin-top:5px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.schedule{padding:13px;border-radius:14px;background:#faf7fb;border:1px solid var(--line);margin-bottom:10px}
+.schedule-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.schedule-actions{display:flex;justify-content:flex-end;margin-top:7px}
+.checkline{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--ink-soft)}
+.checkline input{width:16px;height:16px}
+.result-select{margin-top:8px}
+.ticket-card .ticket-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.ticket-card .ticket-top>div{min-width:0}
+.status{display:inline-flex;align-items:center;white-space:nowrap;border-radius:8px;padding:5px 8px;font-size:11px;font-weight:600}
+.status.win{background:#f9e8f0;color:#a65d7c}.status.wait{background:#fff3df;color:#98712f}.status.lose{background:#f1eff1;color:#777078}.status.none{background:#f4eff5;color:#776d77}
+.calendar-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.calendar-head b{font-size:16px;font-weight:650}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.dow{text-align:center;color:var(--muted);font-size:11px;padding:5px 0}
+.day{min-width:0;min-height:54px;border-radius:9px;padding:5px 2px;text-align:center;font-size:12px;background:#fff;border:1px solid #f0e9f0}
+.day.has{background:#f9eaf2;border-color:#f0dbe6;font-weight:650}.day.future{background:#f3effa;border-color:#e8e0f2}
+.day small{display:block;margin-top:3px;font-size:8px;color:#a96b8b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hotel-card{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.hotel-name{font-weight:650;font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+.stars{letter-spacing:1px;color:#c37b9e;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translate(-50%,12px);background:#493e4b;color:#fff;padding:11px 17px;border-radius:12px;font-size:12px;font-weight:550;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:99;white-space:nowrap;box-shadow:0 5px 18px #31243122}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(min-width:700px){header{padding-top:28px}header .inner{padding-bottom:20px}main{padding-left:22px;padding-right:22px}.main-tabs{margin-bottom:24px}}
+@media(max-width:520px){header{padding:19px 15px 0}header .inner{padding:0 2px 15px;gap:9px}.logo-title{font-size:27px}.logo-sub{font-size:9px;letter-spacing:.17em}main{padding:0 13px 34px}.main-tabs{gap:4px;padding:5px;border-radius:15px;margin-bottom:17px}.main-tabs button{flex-direction:column;gap:3px;min-height:64px;padding:7px 3px;font-size:11px;border-radius:11px}.main-tabs button svg{width:22px;height:22px;flex-basis:22px}.toolbar{grid-template-columns:1fr}.toolbar .search{grid-column:auto}.form-row,.schedule-grid{grid-template-columns:1fr}.actions{flex-direction:column}.actions button{width:100%}.list-card{padding:10px;gap:11px}.thumb{width:76px;height:76px;flex-basis:76px}.card{padding:14px}.panel{padding:15px}.detail-title{font-size:21px}.ticket-card .ticket-top{gap:8px}.status{padding:5px 7px;font-size:10px}.photo-grid{gap:6px}.day{min-height:48px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="inner"><h1 class="logo-title">おしろぐ</h1><div class="logo-sub">oshi log</div></div>
+  <nav class="main-tabs" aria-label="メインメニュー">
+    <button id="tabTicket" onclick="switchMain('ticket')" aria-label="ちけっと"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5A1.5 1.5 0 0 1 5.5 6h13A1.5 1.5 0 0 1 20 7.5v2a2.5 2.5 0 0 0 0 5v2a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 16.5v-2a2.5 2.5 0 0 0 0-5z"/><path d="M9 7v2m0 2v2m0 2v2"/></svg><span>ちけっと</span></button>
+    <button id="tabEvent" onclick="switchMain('event')" aria-label="おもいで"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 5V3.8M16 5V3.8M4 9h16"/><circle cx="9" cy="13" r="1.4"/><path d="m6.5 18 4.2-3.5 2.6 2 2.2-1.8 2 3.3"/></svg><span>おもいで</span></button>
+    <button id="tabHotel" onclick="switchMain('hotel')" aria-label="おとまり"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5V20M2.5 20h19"/><path d="M8 8h2m4 0h2M8 12h2m4 0h2M10 20v-4h4v4"/></svg><span>おとまり</span></button>
+  </nav>
+</header>
+<main>
+
+<section id="ticketPage">
+<div id="ticketList"></div><button class="primary full" onclick="ticketForm()">＋ チケット申し込みを登録</button>
+</section>
+
+<section id="eventPage" class="hidden">
+<div class="sub-tabs"><button id="subFuture" onclick="eventMode='future';renderEvents()">これから</button><button id="subPast" onclick="eventMode='past';renderEvents()">思い出</button><button id="subCal" onclick="eventMode='calendar';renderEvents()">カレンダー</button></div>
+<div id="eventContent"></div><button class="primary full" onclick="eventForm()">＋ 現場を登録</button>
+</section>
+
+<section id="hotelPage" class="hidden"><div id="hotelList"></div><button class="primary full" onclick="hotelForm()">＋ 宿泊記録を登録</button></section>
+<section id="editor" class="hidden"></section><section id="detail" class="hidden"></section>
+</main><div id="toast" class="toast"></div>
+<script>
+const KEY='field_album_v4';
+let db=loadDB();let eventMode='future';let currentPhotos=[];let cover=0;let currentEventId='';let currentSlide=0;let calendarDate=new Date();
+const PHOTO_DB='oshi_log_photos_v1';
+let photoDBPromise=null;
+function openPhotoDB(){return photoDBPromise||(photoDBPromise=new Promise((resolve,reject)=>{const r=indexedDB.open(PHOTO_DB,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('photos'))r.result.createObjectStore('photos')};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)}))}
+async function savePhotoBlob(id,blob){const dbi=await openPhotoDB();return new Promise((resolve,reject)=>{const tx=dbi.transaction('photos','readwrite');tx.objectStore('photos').put(blob,id);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
+async function getPhotoBlob(id){const dbi=await openPhotoDB();return new Promise((resolve,reject)=>{const tx=dbi.transaction('photos','readonly');const r=tx.objectStore('photos').get(id);r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>reject(r.error)})}
+async function deletePhotoBlob(id){try{const dbi=await openPhotoDB();return new Promise((resolve,reject)=>{const tx=dbi.transaction('photos','readwrite');tx.objectStore('photos').delete(id);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}catch(e){}}
+async function resolvePhoto(value){if(value&&typeof value==='object'&&value.id&&value.type==='idb'){try{const blob=await getPhotoBlob(value.id);if(blob)return URL.createObjectURL(blob)}catch(e){}return null}return null}
+
+function showToast(message){
+  const el=document.getElementById('toast');
+  if(!el)return;
+  el.textContent=message;
+  el.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer=setTimeout(()=>el.classList.remove('show'),1800);
+}
+
+function loadDB(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(!raw)return {tickets:[],events:[],hotels:[]};
+    const d=JSON.parse(raw);
+    return {
+      tickets:Array.isArray(d.tickets)?d.tickets:[],
+      events:Array.isArray(d.events)?d.events.map(e=>({ ...e, photos:Array.isArray(e.photos)?e.photos.slice():[] })):[],
+      hotels:Array.isArray(d.hotels)?d.hotels:[]
+    };
+  }catch{return {tickets:[],events:[],hotels:[]}}
+}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2);
+const isoToday=()=>new Date().toISOString().slice(0,10);
+const dateText=s=>s?new Date(s+'T00:00:00').toLocaleDateString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit'}):'';
+function persist(){
+  const payload=JSON.stringify({tickets:db.tickets,events:db.events.map(e=>({ ...e, photos:Array.isArray(e.photos)?e.photos.slice():[] })),hotels:db.hotels});
+  try{localStorage.setItem(KEY,payload);updateStats()}catch(err){showToast('保存できませんでした。データは変更していません');throw err}
+}
+function toastMessage(msg){let t=$('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),2500)}
+function toast(){toastMessage('保存しました')}
+function complete(page,msg){switchMain(page);requestAnimationFrame(()=>toastMessage(msg));}
+function updateStats(){}
+function hideAll(){['ticketPage','eventPage','hotelPage','editor','detail'].forEach(id=>$(id).classList.add('hidden'))}
+function switchMain(x){hideAll();['tabTicket','tabEvent','tabHotel'].forEach(id=>$(id).classList.remove('active'));$(x==='ticket'?'ticketPage':x==='event'?'eventPage':'hotelPage').classList.remove('hidden');$(x==='ticket'?'tabTicket':x==='event'?'tabEvent':'tabHotel').classList.add('active');if(x==='ticket')renderTickets();if(x==='event')renderEvents();if(x==='hotel')renderHotels()}
+function editor(title,html,back){hideAll();$('editor').classList.remove('hidden');$('editor').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('${back}')">← 戻る</button><h2>${title}</h2>${html}</div>`;hydrateEditorPhotos($('editor'))}
+function statusHtml(s){if(s==='win')return '<span class="status win">🎉 当選</span>';if(s==='lose')return '<span class="status lose">落選</span>';if(s==='wait')return '<span class="status wait">⏳ 当落待ち</span>';return '<span class="status none">未登録</span>'}
+
+function photoCandidates(value){
+  if(value==null)return [];
+  if(typeof value==='string')return value.trim()?[value.trim()]:[];
+  if(typeof value!=='object')return [];
+  const keys=['dataUrl','dataURL','data','src','url','base64','image','photo','imageData','imageUrl'];
+  const out=[];
+  for(const k of keys){
+    const v=value[k];
+    if(typeof v==='string'&&v.trim()&&!out.includes(v.trim()))out.push(v.trim());
+  }
+  return out;
+}
+async function applyPhotoSrc(img, value){
+  if(!img)return;
+  const candidates=photoCandidates(value);
+  if(!candidates.length && !(value&&typeof value==='object'&&value.type==='idb')){img.removeAttribute('src');return;}
+  if(value&&typeof value==='object'&&value.type==='idb'){
+    const src=await resolvePhoto(value);
+    if(src){img.dataset.photoError='false';img.src=src;img.onload=()=>{try{URL.revokeObjectURL(src)}catch(e){}};return;}
+  }
+  let i=0;
+  const tryNext=()=>{
+    if(i>=candidates.length){img.removeAttribute('src');img.dataset.photoError='true';return;}
+    const src=candidates[i++];img.dataset.photoError='false';img.src=src;
+  };
+  img.onerror=tryNext;tryNext();
+}
+function hydrateEventPhotos(root){
+  if(!root) return;
+  root.querySelectorAll('img[data-event-photo]').forEach(img=>{
+    const e=db.events.find(x=>x.id===img.getAttribute('data-event-photo'));
+    if(e && Array.isArray(e.photos) && e.photos.length){
+      const index=Math.max(0,Math.min(Number(e.cover)||0,e.photos.length-1));
+      applyPhotoSrc(img,e.photos[index]||e.photos[0]);
+    }
+  });
+}
+function hydrateEditorPhotos(root){
+  if(!root) return;
+  root.querySelectorAll('img[data-editor-photo]').forEach(img=>{
+    const i=Number(img.getAttribute('data-editor-photo'));
+    applyPhotoSrc(img,currentPhotos[i]);
+  });
+}
+function hydrateDetailPhoto(root){
+  const img=root?.querySelector?.('#detailPhoto');
+  if(!img) return;
+  const e=db.events.find(x=>x.id===currentEventId), p=e?.photos||[];
+  if(p.length) applyPhotoSrc(img,p[currentSlide]);
+}
+
+function renderTickets(){
+ $('ticketList').innerHTML=db.tickets.length?db.tickets.map(t=>{let selected=t.shows.filter(s=>s.selected),wins=selected.filter(s=>s.result==='win');return `<div class="card ticket-card" onclick="ticketDetail('${t.id}')"><div class="ticket-top"><div><div class="list-title">${esc(t.name||'公演名未登録')}</div><div class="meta">申込期間 ${dateText(t.period)} ～ ${dateText(t.deadline)}</div><div class="meta">当落 ${dateText(t.resultDate)}　入金 ${dateText(t.payment)}</div></div>${wins.length?statusHtml('win'):selected.some(s=>s.result==='lose')?statusHtml('lose'):selected.length?statusHtml('wait'):''}</div><div class="meta" style="margin-top:6px">申込公演：${selected.length}公演　／　全${t.shows.length}公演</div></div>`}).join(''):'<div class="card empty">まだチケット申し込みの記録がありません🎫</div>'
+}
+function ticketForm(id){let t=id?db.tickets.find(x=>x.id===id):{name:'',period:'',deadline:'',resultDate:'',payment:'',shows:[]};editor(id?'🎫 申し込みを編集':'🎫ちけっと',`<div class="form"><label>公演名</label><input id="tn" value="${esc(t.name)}"><label>申込期間</label><div class="form-row"><input id="tp" type="date" value="${esc(t.period)}"><input id="tp2" type="date" value="${esc(t.periodEnd||'')}"></div><div class="hint">開始日 ～ 終了日</div><label>申込期限</label><input id="td" type="date" value="${esc(t.deadline)}"><label>当落日</label><input id="tr" type="date" value="${esc(t.resultDate)}"><label>入金期限</label><input id="tpay" type="date" value="${esc(t.payment)}"><label>公演日・都道府県・会場・公演時間（全スケジュール）</label><div id="scheduleRows">${(t.shows||[]).map(showRow).join('')}</div><button type="button" class="ghost" onclick="addShow()">＋ 公演を追加</button><div class="actions"><button class="primary" onclick="saveTicket('${id||''}')">保存</button></div></div>`,'ticket')}
+function showRow(s={}){return `<div class="schedule"><div class="schedule-grid"><input class="sd" type="date" value="${esc(s.date)}" placeholder="公演日"><input class="sp" value="${esc(s.pref)}" placeholder="都道府県"><input class="sv" value="${esc(s.venue)}" placeholder="会場"><input class="st" value="${esc(s.time)}" placeholder="公演時間"></div><label class="checkline" style="margin-top:8px"><input class="ss" type="checkbox" ${s.selected?'checked':''}> この公演を申し込む</label><select class="sr result-select"><option value="wait" ${!s.result||s.result==='wait'?'selected':''}>当落未登録</option><option value="win" ${s.result==='win'?'selected':''}>当選</option><option value="lose" ${s.result==='lose'?'selected':''}>落選</option></select></div>`}
+function addShow(){let d=document.createElement('div');d.innerHTML=showRow();$('scheduleRows').appendChild(d.firstElementChild)}
+function saveTicket(id){let shows=[...document.querySelectorAll('.schedule')].map(r=>({date:r.querySelector('.sd').value,pref:r.querySelector('.sp').value,venue:r.querySelector('.sv').value,time:r.querySelector('.st').value,selected:r.querySelector('.ss').checked,result:r.querySelector('.sr').value}));let o={id:id||uid(),name:$('tn').value,period:$('tp').value,periodEnd:$('tp2').value,deadline:$('td').value,resultDate:$('tr').value,payment:$('tpay').value,shows};let old=id&&db.tickets.find(x=>x.id===id);old?Object.assign(old,o):db.tickets.push(o);persist();complete('ticket','保存しました')}
+function ticketDetail(id){let t=db.tickets.find(x=>x.id===id);hideAll();$('detail').classList.remove('hidden');let selected=t.shows.filter(s=>s.selected);$('detail').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('ticket')">← 一覧へ</button><h2 class="detail-title">${esc(t.name||'公演名未登録')}</h2><div class="chips"><span class="chip">📅 申込 ${dateText(t.period)}${t.periodEnd?' ～ '+dateText(t.periodEnd):''}</span><span class="chip">⏰ 期限 ${dateText(t.deadline)}</span><span class="chip">📣 当落 ${dateText(t.resultDate)}</span><span class="chip">💰 入金 ${dateText(t.payment)}</span></div><div class="section-title">🎪 公演スケジュール</div>${t.shows.map((s,i)=>`<div class="card"><div class="list-title">📅 ${dateText(s.date)}　📍 ${esc(s.pref||'')}　🏟️ ${esc(s.venue||'')}</div><div class="meta">🕐 ${esc(s.time||'')}　${s.selected?'🎫 申込済':'未申込'} ${s.selected?statusHtml(s.result):''}</div></div>`).join('')||'<div class="empty">公演スケジュール未登録</div>'}<div class="actions"><button class="primary" onclick="copyWon('${id}')">📖 当選公演を現場記録にコピー</button><button class="ghost" onclick="ticketForm('${id}')">編集</button></div></div>`}
+function copyWon(id){let t=db.tickets.find(x=>x.id===id),wins=t.shows.filter(s=>s.selected&&s.result==='win');if(!wins.length){toastMessage('当選公演がありません');return}wins.forEach(s=>db.events.push({id:uid(),name:t.name,date:s.date,pref:s.pref,venue:s.venue,seat:'',comment:'',photos:[],cover:0,hotelId:''}));persist();complete('event','保存しました')}
+
+function renderEvents(){['subFuture','subPast','subCal'].forEach(id=>$(id).classList.remove('active'));$(eventMode==='future'?'subFuture':eventMode==='past'?'subPast':'subCal').classList.add('active');if(eventMode==='calendar')return renderCalendar();let today=isoToday();let arr=db.events.filter(e=>eventMode==='future'?(e.date||'')>=today:(e.date||'')<today).sort((a,b)=>(eventMode==='future'?(a.date||'').localeCompare(b.date||''):(b.date||'').localeCompare(a.date||'')));$('eventContent').innerHTML=`<div class="toolbar"><input id="eventSearch" class="search" placeholder="🔍 公演名・会場などを検索" oninput="filterEvents()"><select id="eventPref" onchange="filterEvents()"><option value="">都道府県：すべて</option>${[...new Set(db.events.map(e=>e.pref).filter(Boolean))].sort().map(p=>`<option>${esc(p)}</option>`).join('')}</select><select id="eventYear" onchange="filterEvents()"><option value="">年：すべて</option>${[...new Set(db.events.map(e=>(e.date||'').slice(0,4)).filter(Boolean))].sort().reverse().map(y=>`<option>${y}</option>`).join('')}</select></div><div id="eventList">${eventCards(arr)}</div>`;hydrateEventPhotos($('eventList'))}
+function filterEvents(){let q=($('eventSearch').value||'').toLowerCase(),p=$('eventPref').value,y=$('eventYear').value,today=isoToday();let arr=db.events.filter(e=>(eventMode==='future'?(e.date||'')>=today:(e.date||'')<today)&&(!q||[e.name,e.venue,e.pref,e.seat,e.comment].join(' ').toLowerCase().includes(q))&&(!p||e.pref===p)&&(!y||(e.date||'').startsWith(y))).sort((a,b)=>eventMode==='future'?(a.date||'').localeCompare(b.date||''):(b.date||'').localeCompare(a.date||''));$('eventList').innerHTML=eventCards(arr);hydrateEventPhotos($('eventList'))}
+function eventCards(arr){return arr.length?arr.map(e=>`<div class="list-card" onclick="eventDetail('${e.id}')">${e.photos?.length?`<img class="thumb" data-event-photo="${esc(e.id)}" alt="">`:'<div class="thumb" style="display:grid;place-items:center;font-size:28px">📷</div>'}<div class="list-info"><div class="list-title">${esc(e.name||'公演名未登録')}</div><div class="meta">📅 ${dateText(e.date)}${e.time?'　🕐 '+esc(e.time):''}<br>📍 ${esc(e.pref||'')}　🏟️ ${esc(e.venue||'')}</div>${e.seat?`<div class="meta">🎫 ${esc(e.seat)}</div>`:''}</div></div>`).join(''):'<div class="card empty">該当する現場がありません🌷</div>'}
+
+function renderCalendar(){let y=calendarDate.getFullYear(),m=calendarDate.getMonth(),first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),s=['日','月','火','水','木','金','土'].map(x=>`<div class="dow">${x}</div>`).join('');for(let i=0;i<first;i++)s+='<div></div>';for(let d=1;d<=days;d++){let k=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,a=db.events.filter(e=>e.date===k);s+=`<div class="day ${a.length?(k>=isoToday()?'future':'has'):''}" ${a.length?`onclick="eventDetail('${a[0].id}')"`:''}>${d}${a.length?`<small>🎟️ ${esc(a[0].name||'').slice(0,8)}</small>`:''}</div>`}$('eventContent').innerHTML=`<div class="panel"><div class="calendar-head"><button class="ghost" onclick="calendarDate.setMonth(calendarDate.getMonth()-1);renderCalendar()">‹</button><b>${y}年${m+1}月</b><button class="ghost" onclick="calendarDate.setMonth(calendarDate.getMonth()+1);renderCalendar()">›</button></div><div class="cal-grid">${s}</div></div>`}
+
+function eventForm(id){let e=id?db.events.find(x=>x.id===id):{name:'',date:'',pref:'',venue:'',seat:'',comment:'',photos:[],cover:0,hotelId:''};currentPhotos=[...(e.photos||[])];cover=Math.min(e.cover??0,Math.max(0,currentPhotos.length-1));editor(id?'📖 現場を編集':'📖 現場を登録',`<div class="form"><label>公演名</label><input id="en" value="${esc(e.name)}"><label>公演日</label><input id="ed" type="date" value="${esc(e.date)}"><label>公演時間</label><input id="etime" type="time" value="${esc(e.time||'')}"><label>都道府県</label><input id="ep" value="${esc(e.pref)}"><label>会場</label><input id="ev" value="${esc(e.venue)}"><label>座席</label><input id="eseat" value="${esc(e.seat)}"><label>感想</label><textarea id="ec">${esc(e.comment)}</textarea><label>写真 <span class="hint">複数枚登録可／表紙を1枚選択できます</span></label><input id="files" type="file" accept="image/*" multiple onchange="addSelectedPhotos()"><div id="photoGrid" class="photo-grid">${photoEditorGrid()}</div><label>ホテル <span class="hint">宿泊記録から選択できます</span></label><select id="eh"><option value="">選択しない</option>${db.hotels.map(h=>`<option value="${h.id}" ${e.hotelId===h.id?'selected':''}>${esc(h.name||'ホテル名未登録')}</option>`).join('')}</select><div class="actions"><button class="ghost" onclick="switchMain('event')">キャンセル</button><button class="primary" onclick="saveEvent('${id||''}')">保存</button></div></div>`,'event')}
+function photoEditorGrid(){return currentPhotos.map((p,i)=>`<div class="photo-item ${i===cover?'cover':''}"><img data-editor-photo="${i}" alt=""><button onclick="setCover(${i});return false">${i===cover?'表紙':'表紙にする'}</button><button class="remove" onclick="removePhoto(${i});return false">削除</button></div>`).join('')}
+function setCover(i){cover=i;$('photoGrid').innerHTML=photoEditorGrid();hydrateEditorPhotos($('photoGrid'))}
+function removePhoto(i){currentPhotos.splice(i,1);if(!currentPhotos.length)cover=0;else if(cover===i)cover=0;else if(cover>i)cover--; $('photoGrid').innerHTML=photoEditorGrid();hydrateEditorPhotos($('photoGrid'))}
+function readFiles(fs){return Promise.all([...fs].map(f=>new Promise((resolve,reject)=>{let r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f)})))}
+async function addSelectedPhotos(){let input=$('files');if(!input.files.length)return;try{const added=[];for(const file of input.files){const id='photo_'+uid();await savePhotoBlob(id,file);added.push({type:'idb',id});}currentPhotos.push(...added);input.value='';$('photoGrid').innerHTML=photoEditorGrid();hydrateEditorPhotos($('photoGrid'));showToast('写真を追加しました')}catch(err){showToast('写真を保存できませんでした。もう一度お試しください')} }
+async function saveEvent(id){let o={id:id||uid(),time:document.getElementById('etime')?.value||'',name:$('en').value,date:$('ed').value,pref:$('ep').value,venue:$('ev').value,seat:$('eseat').value,comment:$('ec').value,photos:[...currentPhotos],cover:Math.min(cover,Math.max(0,currentPhotos.length-1)),hotelId:$('eh').value};let old=id&&db.events.find(x=>x.id===id);old?Object.assign(old,o):db.events.push(o);persist();complete('event','保存しました')
+  switchMain('event');
+  requestAnimationFrame(()=>showToast('保存しました'));
+}
+function eventDetail(id){let e=db.events.find(x=>x.id===id);if(!e)return;currentEventId=id;currentSlide=0;hideAll();$('detail').classList.remove('hidden');renderEventDetail()}
+function renderEventDetail(){let e=db.events.find(x=>x.id===currentEventId);if(!e)return;let p=e.photos||[];currentSlide=Math.max(0,Math.min(currentSlide,p.length-1));$('detail').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('event')">← 一覧へ</button><h2 class="detail-title">${esc(e.name||'公演名未登録')}</h2><div class="chips"><span class="chip">📅 ${dateText(e.date)}</span>${e.time?`<span class="chip">🕐 ${esc(e.time)}</span>`:''}<span class="chip">📍 ${esc(e.pref||'')}</span><span class="chip">🏟️ ${esc(e.venue||'')}</span>${e.seat?`<span class="chip">🎫 ${esc(e.seat)}</span>`:''}</div>${p.length?`<div class="section-title">📷 写真</div><div class="carousel"><img id="detailPhoto" alt="">${p.length>1?`<button class="arrow left" onclick="slide(-1)">‹</button><button class="arrow right" onclick="slide(1)">›</button>`:''}</div>${p.length>1?`<div class="dots">${currentSlide+1} / ${p.length}</div>`:''}`:''}<div class="section-title">💭 感想</div><div style="white-space:pre-wrap;line-height:1.9">${esc(e.comment||'—')}</div>${e.hotelId&&db.hotels.find(h=>h.id===e.hotelId)?`<div class="section-title">🏨 ホテル</div><div class="list-card" onclick="hotelDetail('${e.hotelId}')"><div class="list-info"><div class="list-title">${esc(db.hotels.find(h=>h.id===e.hotelId).name||'ホテル名未登録')}</div><div class="meta">宿泊記録を見る →</div></div></div>`:''}<div class="actions"><button class="ghost" onclick="eventForm('${e.id}')">編集</button><button class="dangerBtn" onclick="deleteEvent('${e.id}')">削除</button></div></div>`}
+  hydrateDetailPhoto($('detail'));
+function slide(d){let e=db.events.find(x=>x.id===currentEventId),p=e?.photos||[];if(p.length<2)return;currentSlide=(currentSlide+d+p.length)%p.length;renderEventDetail()}
+function deleteEvent(id){
+  if(!id)return;
+  if(!confirm('この現場記録を削除しますか？'))return;
+  db.events=db.events.filter(e=>e.id!==id);
+  persist();
+  currentEventId=null;
+  switchMain('event');
+  requestAnimationFrame(()=>showToast('削除しました'));
+}
+
+function renderHotels(){$('hotelList').innerHTML=db.hotels.length?db.hotels.map(h=>`<div class="card hotel-card" onclick="hotelDetail('${h.id}')"><div><div class="hotel-name">🏨 ${esc(h.name||'ホテル名未登録')}</div><div class="meta">📍 ${esc(h.pref||'')}　🚉 ${esc(h.station||'')} ${h.date?'　📅 '+dateText(h.date):''}</div></div><div class="stars">${'★'.repeat(Number(h.rating)||0)}${'☆'.repeat(5-(Number(h.rating)||0))}</div></div>`).join(''):'<div class="card empty">まだ宿泊記録がありません🏨</div>'}
+function hotelForm(id){let h=id?db.hotels.find(x=>x.id===id):{name:'',pref:'',station:'',date:'',price:'',rating:'',revisit:'◎ また泊まりたい',comment:''};editor(id?'🏨おとまりを編集':'🏨おとまり',`<div class="form"><label>ホテル名</label><input id="hn" value="${esc(h.name)}"><label>都道府県</label><input id="hp" value="${esc(h.pref)}"><label>最寄り駅</label><input id="hs" value="${esc(h.station)}"><label>宿泊日</label><input id="hd" type="date" value="${esc(h.date)}"><label>料金</label><input id="hprice" type="number" value="${esc(h.price)}"><label>満足度</label><select id="hr"><option value="">未評価</option>${[1,2,3,4,5].map(n=>`<option value="${n}" ${Number(h.rating)===n?'selected':''}>${'★'.repeat(n)}${'☆'.repeat(5-n)}</option>`).join('')}</select><label>また泊まりたい？</label><select id="hrev"><option>◎ また泊まりたい</option><option>△ 条件次第</option><option>× もう泊まらない</option></select><label>感想</label><textarea id="hc">${esc(h.comment)}</textarea><div class="actions"><button class="ghost" onclick="switchMain('hotel')">キャンセル</button><button class="primary" onclick="saveHotel('${id||''}')">保存</button></div></div>`,'hotel');$('hrev').value=h.revisit||'◎ また泊まりたい'}
+function saveHotel(id){let o={id:id||uid(),name:$('hn').value,pref:$('hp').value,station:$('hs').value,date:$('hd').value,price:$('hprice').value,rating:$('hr').value,revisit:$('hrev').value,comment:$('hc').value};let old=id&&db.hotels.find(x=>x.id===id);old?Object.assign(old,o):db.hotels.push(o);persist();complete('hotel','保存しました')
+  switchMain('hotel');
+  requestAnimationFrame(()=>showToast('保存しました'));
+}
+function hotelDetail(id){let h=db.hotels.find(x=>x.id===id);hideAll();$('detail').classList.remove('hidden');$('detail').innerHTML=`<div class="panel"><button class="ghost" onclick="switchMain('hotel')">← ホテル一覧</button><h2 class="detail-title">🏨 ${esc(h.name||'ホテル名未登録')}</h2><div class="chips"><span class="chip">📍 ${esc(h.pref||'')}</span>${h.station?`<span class="chip">🚉 ${esc(h.station)}</span>`:''}${h.date?`<span class="chip">📅 ${dateText(h.date)}</span>`:''}${h.price?`<span class="chip">💰 ${esc(h.price)}円</span>`:''}</div><div class="section-title">⭐ 満足度</div><div class="stars" style="font-size:24px">${'★'.repeat(Number(h.rating)||0)}${'☆'.repeat(5-(Number(h.rating)||0))}</div><div class="section-title">💭 感想</div><div style="white-space:pre-wrap;line-height:1.9">${esc(h.comment||'—')}</div><div class="section-title">また泊まりたい？</div><div>${esc(h.revisit||'—')}</div><div class="actions"><button class="ghost" onclick="hotelForm('${id}')">編集</button><button class="dangerBtn" onclick="deleteHotel('${id}')">削除</button></div></div>`}
+function deleteHotel(id){
+  if(!id)return;
+  if(!confirm('この宿泊記録を削除しますか？'))return;
+  db.hotels=db.hotels.filter(h=>h.id!==id);
+  db.events.forEach(e=>{if(e.hotelId===id)e.hotelId=''});
+  persist();
+  switchMain('hotel');
+  requestAnimationFrame(()=>showToast('削除しました'));
+}
+
+updateStats();switchMain('event');
+</script>
+</body></html>
